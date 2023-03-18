@@ -1,0 +1,56 @@
+Jump
+j Address
+0100 0000 0000 Address
+4 4 4 20
+Unconditionally jump to the instruction whose address is given by the address field.
+
+Jump to register
+jr Rs
+0101 0000 Rs 0000 0000 0000 0000 0000
+4 4 4 20
+Unconditionally jump to the instruction whose address is in the least significant 20 bits of register Rs.
+
+Jump and link
+jal Address
+0110 0000 0000 Address
+4 4 4 20
+Unconditionally jump to the instruction whose address is given by the address field. Save the address of
+the next instruction in register $ra.
+
+Jump and link register
+jalr Rs
+0111 0000 Rs 0000 0000 0000 0000 0000
+4 4 4 20
+Unconditionally jump to the instruction whose address is in the least significant 20 bits of register Rs.
+Save the address of the next instruction in register $ra.
+
+Branch on equal to zero
+beqz Rs, Offset
+1010 0000 Rs Offset
+4 4 4 20
+Conditionally branch the number of instructions specified by the sign-extended offset if register Rs
+is
+equal to 0.
+
+Branch on not equal to zero
+bnez Rs, Offset
+1011 0000 Rs Offset
+4 4 4 20
+Conditionally branch the number of instructions specified by the sign-extended offset if register Rs
+is not
+equal to 0.
+
+Memory instructions
+Load word
+lw Rd, Offset(Rs)
+1000 Rd Rs Offset
+4 4 4 20
+Add the contents of register Rs and the sign-extended offset to give an effective address. Load the contents
+of the memory location specified by this effective address into register Rd.
+
+Store word
+sw Rd, Offset(Rs)
+1001 Rd Rs Offset
+4 4 4 20
+Add the contents of register Rs and the sign-extended offset to give an effective address. Store the contents
+of register Rd into the memory location specified by this effective address.

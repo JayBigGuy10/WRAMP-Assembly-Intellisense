@@ -1,0 +1,189 @@
+Set on less than
+slt Rd, Rs, Rt
+0010 Rd Rs 0000 0000 0000 0000 Rt
+4 4 4 4 12 4
+Set register Rd to 1 if register Rs
+is less than register Rt according to a signed comparison, and 0 otherwise.
+
+Set on less than immediate
+slti Rd, Rs, Immediate
+0011 Rd Rs 0000 Immediate
+4 4 4 4 16
+Set register Rd to 1 if register Rs
+is less than the sign-extended immediate according to a signed comparison,
+and 0 otherwise.
+
+Set on less than, unsigned
+sltu Rd, Rs, Rt
+0010 Rd Rs 0001 0000 0000 0000 Rt
+4 4 4 4 12 4
+Set register Rd to 1 if register Rs
+is less than register Rt according to an unsigned comparison, and 0
+otherwise.
+
+Set on less than, unsigned, immediate
+sltui Rd, Rs, Immediate
+0011 Rd Rs 0001 Immediate
+4 4 4 4 16
+Set register Rd to 1 if register Rs
+is less than the zero-extended immediate according to an unsigned
+comparison, and 0 otherwise.
+
+Set on greater than
+sgt Rd, Rs, Rt
+0010 Rd Rs 0010 0000 0000 0000 Rt
+4 4 4 4 12 4
+Set register Rd to 1 if register Rs
+is greater than register Rt according to a signed comparison, and 0
+otherwise.
+
+Set on greater than, immediate
+sgti Rd, Rs, Immediate
+0011 Rd Rs 0010 Immediate
+4 4 4 4 16
+Set register Rd to 1 if register Rs
+is greater than the sign-extended immediate according to a signed
+comparison, and 0 otherwise.
+
+Set on greater than, unsigned
+sgtu Rd, Rs, Rt
+0010 Rd Rs 0011 0000 0000 0000 Rt
+4 4 4 4 12 4
+Set register Rd to 1 if register Rs
+is greater than register Rt according to an unsigned comparison, and 0
+otherwise.
+
+Set on greater than, unsigned, immediate
+sgtui Rd, Rs, Immediate
+0011 Rd Rs 0011 Immediate
+4 4 4 4 16
+Set register Rd to 1 if register Rs
+is greater than the zero-extended immediate according to an unsigned
+comparison, and 0 otherwise.
+
+Set on less than or equal to
+sle Rd, Rs, Rt
+0010 Rd Rs 0100 0000 0000 0000 Rt
+4 4 4 4 12 4
+Set register Rd to 1 if register Rs
+is less than or equal to register Rt according to a signed comparison,
+and 0 otherwise.
+
+Set on less than or equal to, immediate
+slei Rd, Rs, Immediate
+0011 Rd Rs 0100 Immediate
+4 4 4 4 16
+Set register Rd to 1 if register Rs
+is less than or equal to the sign-extended immediate according to a
+signed comparison, and 0 otherwise.
+
+Set on less than or equal to, unsigned
+sleu Rd, Rs, Rt
+0010 Rd Rs 0101 0000 0000 0000 Rt
+4 4 4 4 12 4
+Set register Rd to 1 if register Rs
+is less than or equal to register Rt according to an unsigned comparison,
+and 0 otherwise.
+
+Set on less than or equal to, unsigned, immediate
+sleui Rd, Rs, Immediate
+0011 Rd Rs 0101 Immediate
+4 4 4 4 16
+Set register Rd to 1 if register Rs
+is less than or equal to the zero-extended immediate according to an
+unsigned comparison, and 0 otherwise.
+
+Set on greater than or equal to
+sge Rd, Rs, Rt
+0010 Rd Rs 0110 0000 0000 0000 Rt
+4 4 4 4 12 4
+Set register Rd to 1 if register Rs
+is greater than or equal to register Rt according to a signed comparison,
+and 0 otherwise.
+
+Set on greater than or equal to immediate
+sgei Rd, Rs, Immediate
+0011 Rd Rs 0110 Immediate
+4 4 4 4 16
+Set register Rd to 1 if register Rs
+is greater than or equal to the sign-extended immediate according to a
+signed comparison, and 0 otherwise.
+
+Set on greater than or equal to, unsigned
+sgeu Rd, Rs, Rt
+0010 Rd Rs 0111 0000 0000 0000 Rt
+4 4 4 4 12 4
+Set register Rd to 1 if register Rs
+is greater than or equal to register Rt according to an unsigned
+comparison, and 0 otherwise.
+
+Set on greater than or equal to, unsigned, immediate
+sgeui Rd, Rs, Immediate
+0011 Rd Rs 0111 Immediate
+4 4 4 4 16
+Set register Rd to 1 if register Rs
+is greater than or equal to the zero-extended immediate according to an
+unsigned comparison, and 0 otherwise.
+
+Set on equal to
+seq Rd, Rs, Rt
+0010 Rd Rs 1000 0000 0000 0000 Rt
+4 4 4 4 12 4
+Set register Rd to 1 if register Rs
+is equal to register Rt according to a signed comparison, and 0 otherwise.
+
+Set on equal to immediate
+seqi Rd, Rs, Immediate
+0011 Rd Rs 1000 Immediate
+4 4 4 4 16
+Set register Rd to 1 if register Rs
+is equal to the sign-extended immediate according to a signed comparison,
+and 0 otherwise.
+
+Set on equal to, unsigned
+sequ Rd, Rs, Rt
+0010 Rd Rs 1001 0000 0000 0000 Rt
+4 4 4 4 12 4
+Set register Rd to 1 if register Rs
+is equal to register Rt according to an unsigned comparison, and 0
+otherwise.
+
+Set on equal to, unsigned, immediate
+sequi Rd, Rs, Immediate
+0011 Rd Rs 1001 Immediate
+4 4 4 4 16
+Set register Rd to 1 if register Rs
+is equal to the zero-extended immediate according to an unsigned
+comparison, and 0 otherwise.
+
+Set on not equal to
+sne Rd, Rs, Rt
+0010 Rd Rs 1010 0000 0000 0000 Rt
+4 4 4 4 12 4
+Set register Rd to 1 if register Rs
+is not equal to register Rt according to a signed comparison, and 0
+otherwise.
+
+Set on not equal to immediate
+snei Rd, Rs, Immediate
+0011 Rd Rs 1010 Immediate
+4 4 4 4 16
+Set register Rd to 1 if register Rs
+is not equal to the sign-extended immediate according to a signed
+comparison, and 0 otherwise.
+
+Set on not equal to, unsigned
+sneu Rd, Rs, Rt
+0010 Rd Rs 1011 0000 0000 0000 Rt
+4 4 4 4 12 4
+Set register Rd to 1 if register Rs
+is not equal to register Rt according to an unsigned comparison, and 0
+otherwise.
+
+Set on not equal to, unsigned, immediate
+sneui Rd, Rs, Immediate
+0011 Rd Rs 1011 Immediate
+4 4 4 4 16
+Set register Rd to 1 if register Rs
+is not equal to the zero-extended immediate according to an unsigned
+comparison, and 0 otherwise.

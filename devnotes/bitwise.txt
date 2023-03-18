@@ -1,0 +1,86 @@
+And
+and Rd, Rs, Rt
+0000 Rd Rs 1011 0000 0000 0000 Rt
+4 4 4 4 12 4
+Put the result of the logical AND of registers Rs and Rt
+into register Rd.
+
+And, immediate
+andi Rd, Rs, Immediate
+0001 Rd Rs 1011 Immediate
+4 4 4 4 16
+Put the result of the logical AND of register Rs and the zero-extended immediate into register Rd.
+
+Or
+or Rd, Rs, Rt
+0000 Rd Rs 1101 0000 0000 0000 Rt
+4 4 4 4 12 4
+Put the result of the logical OR of registers Rs and Rt
+into register Rd.
+
+Or, immediate
+ori Rd, Rs, Immediate
+0001 Rd Rs 1101 Immediate
+4 4 4 4 16
+Put the result of the logical OR of register Rs and the zero-extended immediate into register Rd.
+
+Xor
+xor Rd, Rs, Rt
+0000 Rd Rs 1111 0000 0000 0000 Rt
+4 4 4 4 12 4
+Put the result of the logical exclusive-OR of registers Rs and Rt
+into register Rd.
+
+Xor, immediate
+xori Rd, Rs, Immediate
+0001 Rd Rs 1111 Immediate
+4 4 4 4 16
+Put the result of the logical exclusive-OR of register Rs and the zero-extended immediate into register Rd.
+
+Shift left logical
+sll Rd, Rs, Rt
+0000 Rd Rs 1010 0000 0000 0000 Rt
+4 4 4 4 12 4
+Shift the value in register Rs
+left by the unsigned value given by the least significant 5 bits of register Rt,
+and put the result in register Rd, inserting zeros into the low order bits.
+
+Shift left logical, immediate
+slli Rd, Rs, Immediate
+0001 Rd Rs 1010 Immediate
+4 4 4 4 16
+Shift the value in register Rs
+left by the unsigned value given by the least significant 5 bits of the immediate,
+and put the result in register Rd, inserting zeros into the low order bits.
+
+Shift right logical
+srl Rd, Rs, Rt
+0000 Rd Rs 1100 0000 0000 0000 Rt
+4 4 4 4 12 4
+Shift the value in register Rs
+right by the unsigned value given by the least significant 5 bits of register
+Rt, and place the result in register Rd, inserting zeros into the high order bits.
+
+Shift right logical, immediate
+srli Rd, Rs, Immediate
+0001 Rd Rs 1100 Immediate
+4 4 4 4 16
+Shift the value in register Rs
+right by the unsigned value given by the least significant 5 bits of the
+immediate, and place the result in register Rd, inserting zeros into the high order bits.
+
+Shift right arithmetic
+sra Rd, Rs, Rt
+0000 Rd Rs 1110 0000 0000 0000 Rt
+4 4 4 4 12 4
+Shift the value in register Rs
+right by the unsigned value given by the least significant 5 bits of register
+Rt, and place the result in register Rd, sign-extending the high order bits.
+
+Shift right arithmetic, immediate
+srai Rd, Rs, Immediate
+0001 Rd Rs 1110 Immediate
+4 4 4 4 16
+Shift the value in register Rs
+right by the unsigned value given by the least significant 5 bits of the
+immediate, and place the result in register Rd, sign-extending the high order bits.

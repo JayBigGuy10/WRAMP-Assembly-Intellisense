@@ -1,0 +1,165 @@
+Addition
+add Rd, Rs, Rt
+0000 Rd Rs 0000 0000 0000 0000 Rt
+4 4 4 4 12 4
+Put the sum of register Rs and register Rt
+into register Rd. Generate an overflow exception on signed
+overflow.
+
+Addition, immediate
+addi Rd, Rs, Immediate
+0001 Rd Rs 0000 Immediate
+4 4 4 4 16
+Put the sum of register Rs and the sign-extended immediate into register Rd. Generate an overflow
+exception on signed overflow.
+
+Addition, unsigned
+addu Rd, Rs, Rt
+0000 Rd Rs 0001 0000 0000 0000 Rt
+4 4 4 4 12 4
+Put the sum of register Rs and register Rt
+into register Rd. Generate an overflow exception on unsigned
+overflow.
+
+Addition, unsigned, immediate
+addui Rd, Rs, Immediate
+0001 Rd Rs 0001 Immediate
+4 4 4 4 16
+Put the sum of register Rs and the zero-extended immediate into register Rd. Generate an overflow
+exception on unsigned overflow.
+
+Subtraction
+sub Rd, Rs, Rt
+0000 Rd Rs 0010 0000 0000 0000 Rt
+4 4 4 4 12 4
+Put the difference of register Rs and register Rt
+into register Rd. Generate an overflow exception on
+signed overflow.
+
+Subtraction, immediate
+subi Rd, Rs, Immediate
+0001 Rd Rs 0010 Immediate
+4 4 4 4 16
+Put the difference of register Rs and the sign-extended immediate into register Rd. Generate an overflow
+exception on signed overflow.
+
+Subtraction, unsigned
+subu Rd, Rs, Rt
+0000 Rd Rs 0011 0000 0000 0000 Rt
+4 4 4 4 12 4
+Put the difference of register Rs and register Rt
+into register Rd. Generate an overflow exception on
+unsigned overflow.
+
+Subtraction, unsigned, immediate
+subui Rd, Rs, Immediate
+0001 Rd Rs 0011 Immediate
+4 4 4 4 16
+Put the difference of register Rs and the zero-extended immediate into register Rd. Generate an overflow
+exception on unsigned overflow.
+
+Multiplication
+mult Rd, Rs, Rt
+0000 Rd Rs 0100 0000 0000 0000 Rt
+4 4 4 4 12 4
+Put the product of the signed multiplication of register Rs and register Rt
+into register Rd. Generate an
+overflow exception on signed overflow.
+
+Multiplication, immediate
+multi Rd, Rs, Immediate
+0001 Rd Rs 0100 Immediate
+4 4 4 4 16
+Put the product of the signed multiplication of register Rs and the sign-extended immediate into register
+Rd. Generate an overflow exception on signed overflow.
+
+Multiplication, unsigned
+multu Rd, Rs, Rt
+0000 Rd Rs 0101 0000 0000 0000 Rt
+4 4 4 4 12 4
+Put the product of the unsigned multiplication of register Rs and register Rt
+into register Rd. Generate
+an overflow exception on unsigned overflow.
+
+Multiplication, unsigned, immediate
+multui Rd, Rs, Immediate
+0001 Rd Rs 0101 Immediate
+4 4 4 4 16
+Put the product of the unsigned multiplication of register Rs and the zero-extended immediate into
+register Rd. Generate an overflow exception on unsigned overflow.
+
+Division
+div Rd, Rs, Rt
+0000 Rd Rs 0110 0000 0000 0000 Rt
+4 4 4 4 12 4
+Put the result of the signed integer division of register Rs by register Rt
+into register Rd. Generate a
+divide-by-zero exception if the contents of Rt
+is zero.
+
+Division, immediate
+divi Rd, Rs, Immediate
+0001 Rd Rs 0110 Immediate
+4 4 4 4 16
+Put the result of the signed integer division of register Rs by the sign-extended immediate into register
+Rd. Generate a divide-by-zero exception if the immediate value is zero.
+
+Division, unsigned
+divu Rd, Rs, Rt
+0000 Rd Rs 0111 0000 0000 0000 Rt
+4 4 4 4 12 4
+Put the result of the unsigned division of register Rs by register Rt
+into register Rd. Generate a
+divide-by-zero exception if the contents of Rt
+is zero.
+
+Division, unsigned, immediate
+divui Rd, Rs, Immediate
+0001 Rd Rs 0111 Immediate
+4 4 4 4 16
+Put the result of the unsigned division of register Rs by the zero-extended immediate into register Rd.
+Generate a divide-by-zero exception if the immediate value is zero.
+
+Remainder
+rem Rd, Rs, Rt
+0000 Rd Rs 1000 0000 0000 0000 Rt
+4 4 4 4 12 4
+Put the remainder of the signed division of register Rs by register Rt
+into register Rd. Generate a
+divide-by-zero exception if the contents of Rt
+is zero.
+
+Remainder, immediate
+remi Rd, Rs, Immediate
+0001 Rd Rs 1000 Immediate
+4 4 4 4 16
+Put the remainder of the signed division of register Rs by the sign-extended immediate into register Rd.
+Generate a divide-by-zero exception if the immediate value is zero.
+
+Remainder, unsigned
+remu Rd, Rs, Rt
+0000 Rd Rs 1001 0000 0000 0000 Rt
+4 4 4 4 12 4
+Put the remainder of the unsigned division of register Rs by the register Rt
+into register Rd. Generate a
+divide-by-zero exception if the contents of Rt
+is zero.
+
+Remainder, unsigned, immediate
+remui Rd, Rs, Immediate
+0001 Rd Rs 1001 Immediate
+4 4 4 4 16
+Put the remainder of the unsigned division of register Rs by the zero-extended immediate into register Rd.
+Generate a divide-by-zero exception if the immediate value is zero.
+
+Load high immediate
+lhi Rd, Immediate
+0011 Rd 0000 1110 Immediate
+4 4 4 4 16
+Put the 16 bit immediate into the upper 16 bits of register Rd, and set the lower 16 bits to zero.
+
+Load address
+la Rd, Address
+1100 Rd 0000 Address
+4 4 4 20
+Put the zero-extended 20 bit address into register Rd.
