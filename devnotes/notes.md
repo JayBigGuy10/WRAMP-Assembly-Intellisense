@@ -7,3 +7,8 @@ https://marketplace.visualstudio.com/items?itemName=JLitolff-WaikatoUni.wramp-as
 https://marketplace.visualstudio.com/manage/publishers/jlitolff-waikatouni
 
 https://marketplace.visualstudio.com/manage/publishers/JLitolff-WaikatoUni/extensions/wramp-assembly-intellisense/hub?_a=acquisition
+
+
+https://learn.microsoft.com/en-us/azure/devops/organizations/accounts/create-organization?view=azure-devops
+
+https://code.visualstudio.com/api/working-with-extensions/publishing-extension
