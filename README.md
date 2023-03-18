@@ -14,7 +14,7 @@ Intellisense input suggestions will appear which contain all WRAMP Instruction s
 
 Commands, Directives and system registers also have documentation which will display upon hover. Includes command parameters, type and function explanations
 
-![sample](img/directive-suggest.png)
+![sample](img/directive-suggest.png)<br>
 *directive suggestions*<br>
 ![sample](img/instruction-suggest-accept.png)<br>
 *inserted snippet string*
