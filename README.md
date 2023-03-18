@@ -28,6 +28,16 @@ Commands, Directives and system registers also have documentation which will dis
 
 ## Notes
 
+based on (vaguely) https://github.com/microsoft/vscode-extension-samples/tree/main/completions-sample
+
+if developing follow install instructions from here https://github.com/microsoft/vscode-extension-samples/
+
+Usage
+1. git clone https://github.com/JayBigGuy10/WRAMP-Assembly-Intellisense
+2. npm install in the terminal, 
+3. then F5 to run the sample
+
+
 thanks to [stackoverflow.com/67749752/](https://stackoverflow.com/questions/67749752/how-to-apply-styling-and-html-tags-on-hover-message-with-vscode-api)
 and [stackoverflow.com//54792391/](
 https://stackoverflow.com/questions/54792391/vs-code-hover-extension-implement-hoverprovider) for providing needed usage contex
