@@ -654,6 +654,12 @@ export function activate(context: vscode.ExtensionContext) {
 
 			items.push(commitCharacterCompletion);
 
+			const commentCharacterCompletion = new vscode.CompletionItem('#');
+			commentCharacterCompletion.commitCharacters = [''];
+			commentCharacterCompletion.documentation = new vscode.MarkdownString('Press `#` to get assemble and link comments');
+
+			items.push(commitCharacterCompletion);
+
 			// a completion item that retriggers IntelliSense when being accepted,
 			// the `command`-property is set which the editor will execute after 
 			// completion has been inserted. Also, the `insertText` is set so that 
@@ -756,16 +762,47 @@ export function activate(context: vscode.ExtensionContext) {
 		'.' // triggered whenever a '.' is being typed
 	);
 
+	const provider3 = vscode.languages.registerCompletionItemProvider(
+		'wramp',
+		{
+			provideCompletionItems(document: vscode.TextDocument, position: vscode.Position) {
+
+				// get all text until the `position` and check if it reads `console.`
+				// and if so then complete if `log`, `warn`, and `error`
+				const linePrefix = document.lineAt(position).text.substr(0, position.character);
+				if (!linePrefix.endsWith('#')) {
+					return undefined;
+				}
+
+				const wasmLabel = new vscode.CompletionItem('wasm');
+				const textLabelDocs: any = new vscode.MarkdownString(`Allows extra WRAMP language files to be specified for assembly, current file is included by default. Don't include file extensions. Place at top of file.`);
+				wasmLabel.documentation = textLabelDocs;
+
+				const wlinkLabel = new vscode.CompletionItem('wlink');
+				const dataLabelDocs: any = new vscode.MarkdownString(`Allows other files to be specified for linking with the current file, current file included by default. Don't include file extensions. Place at top of file`);
+				wlinkLabel.documentation = dataLabelDocs;
+
+
+				return [
+					wasmLabel,
+					wlinkLabel
+
+				];
+			}
+		},
+		'#' // triggered whenever a '.' is being typed
+	);
+
 	vscode.languages.registerHoverProvider('wramp', {
 		provideHover(document, position, token) {
 
 			const range = document.getWordRangeAtPosition(position);
 			const word = document.getText(range);
 
-			const dollarrange = document.getWordRangeAtPosition(position,RegExp("[$]sp"));
+			const dollarrange = document.getWordRangeAtPosition(position, RegExp("[$]sp"));
 			const dollarword = document.getText(dollarrange);
 
-			const dollarrange2 = document.getWordRangeAtPosition(position,RegExp("[$]ra"));
+			const dollarrange2 = document.getWordRangeAtPosition(position, RegExp("[$]ra"));
 			const dollarword2 = document.getText(dollarrange2);
 
 			//if (word == "HELLO") {
@@ -819,6 +856,30 @@ affect the ability of code to interoperate with other software.`);
 jump and link instruction is executed this register is loaded with the address of the next instruction after
 the jump and link. A return from subroutine is performed by executing a jump to register $ra, ie. jr
 $ra`);
+				markdown.isTrusted = true;
+				return new vscode.Hover(markdown, new vscode.Range(position, position));
+			}
+			//build comments
+			if (word == "wasm") {
+				const markdown = new vscode.MarkdownString('');
+				const codeBlock = `#wasm`;
+				markdown.appendCodeblock(codeBlock, "wramp");
+				markdown.appendMarkdown(`**Code Assembly Directive** - _Comment_
+* Allows extra WRAMP language files to be specified for assembly, current file is included by default. 
+* Don't include file extensions. 
+* Place at top of file.`);
+				markdown.isTrusted = true;
+				return new vscode.Hover(markdown, new vscode.Range(position, position));
+			}
+
+			if (word == "wlink") {
+				const markdown = new vscode.MarkdownString('');
+				const codeBlock = `#wlink`;
+				markdown.appendCodeblock(codeBlock, "wramp");
+				markdown.appendMarkdown(`**Code Linking Directive** - _Comment_
+* Allows other files to be specified for linking with the current file, current file included by default. 
+* Don't include file extensions. 
+* Place at top of file`);
 				markdown.isTrusted = true;
 				return new vscode.Hover(markdown, new vscode.Range(position, position));
 			}
@@ -1608,29 +1669,29 @@ It is similar to a #define directive in C. It will not define an area in memory,
 		}
 	});
 
-	context.subscriptions.push(provider1, provider2);
+	context.subscriptions.push(provider1, provider2, provider3);
 
 	//testing code running ability
 
-	context.environmentVariableCollection.append("PATH",";"+context.extensionUri.fsPath+"/toolchain");
+	context.environmentVariableCollection.append("PATH", ";" + context.extensionUri.fsPath + "/toolchain");
 
 	const codeManager = new CodeManager();
 
-    vscode.window.onDidCloseTerminal(() => {
-        codeManager.onDidCloseTerminal();
-    });
+	vscode.window.onDidCloseTerminal(() => {
+		codeManager.onDidCloseTerminal();
+	});
 
 	const build = vscode.commands.registerCommand("wramp.build", (fileUri: vscode.Uri) => {
 
 		//reset path string
 		//only works on jaydens zephyurus, obvs
 		//context.environmentVariableCollection.replace("PATH","PATH=C:\\Python311\\Scripts\\;C:\\Python311\\;D:\\Oculus\\Support\\oculus-runtime;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\Windows\\System32\\OpenSSH\\;C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common;C:\\Program Files\\Microsoft VS Code\\bin;C:\\Program Files\\Git\\cmd;C:\\Program Files\\Git LFS;C:\\Program Files (x86)\\Tailscale IPN;C:\\Program Files\\NVIDIA Corporation\\NVIDIA NvDLISR;C:\\Program Files\\Microsoft SQL Server\\150\\Tools\\Binn\\;C:\\Program Files\\Microsoft SQL Server\\Client SDK\\ODBC\\170\\Tools\\Binn\\;C:\\Program Files\\dotnet\\;C:\\Program Files (x86)\\PDFtk\\bin\\;C:\\Program Files\\MATLAB\\R2022b\\bin;C:\\Program Files (x86)\\Microsoft SQL Server\\160\\Tools\\Binn\\;C:\\Program Files\\Microsoft SQL Server\\160\\Tools\\Binn\\;C:\\Program Files\\Microsoft SQL Server\\160\\DTS\\Binn\\;C:\\Program Files (x86)\\Microsoft SQL Server\\160\\DTS\\Binn\\;C:\\Program Files\\Azure Data Studio\\bin;C:\\Users\\Jayden Litolff\\Documents\\Uni\\COMPX203\\toolchain-win-3.0.1[UNZIP];C:\\Users\\Jayden Litolff\\AppData\\Local\\Microsoft\\WindowsApps;C:\\Users\\Jayden;C:\\Program Files\\nodejs\\;C:\\ProgramData\\chocolatey\\bin;C:\\Users\\Jayden Litolff\\AppData\\Local\\Microsoft\\WindowsApps;C:\\Users\\Jayden Litolff\\.dotnet\\tools;C:\\Program Files\\Azure Data Studio\\bin;C:\\Users\\Jayden Litolff\\Documents\\Uni\\COMPX203\\toolchain-win-3.0.1;C:\\Users\\Jayden Litolff\\AppData\\Roaming\\npm");
-		const commentLineOne = vscode.window.activeTextEditor?.document.lineAt(0).text; 
+		const commentLineOne = vscode.window.activeTextEditor?.document.lineAt(0).text;
 		const commentLineTwo = vscode.window.activeTextEditor?.document.lineAt(1).text;
 		let wasmArgs: string[] = [''];
 		let wlinkArgs: string[] = [''];
-		if (commentLineOne != undefined && commentLineTwo != undefined){
-			if (commentLineOne.startsWith('#wasm')){
+		if (commentLineOne != undefined && commentLineTwo != undefined) {
+			if (commentLineOne.startsWith('#wasm')) {
 				wasmArgs = commentLineOne.split(' ');
 				wasmArgs.shift();
 			} else if (commentLineTwo.startsWith('#wasm')) {
@@ -1638,17 +1699,17 @@ It is similar to a #define directive in C. It will not define an area in memory,
 				wasmArgs.shift();
 			}
 
-			if (commentLineTwo.startsWith('#wlink')){
+			if (commentLineTwo.startsWith('#wlink')) {
 				wlinkArgs = commentLineTwo.split(' ');
 				wlinkArgs.shift();
-			}else if (commentLineOne.startsWith('#wlink')){
+			} else if (commentLineOne.startsWith('#wlink')) {
 				wlinkArgs = commentLineOne.split(' ');
 				wlinkArgs.shift();
 			}
 
 			codeManager.run(fileUri, wasmArgs, wlinkArgs, context.extensionUri);
 		}
-		
+
 	});
 	context.subscriptions.push(build);
 
