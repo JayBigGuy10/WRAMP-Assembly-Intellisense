@@ -2,7 +2,7 @@
 	"name": "wramp-assembly-intellisense",
 	"displayName": "WRAMP Assembly Intellisense",
 	"icon": "img/icon.png",
-	"version": "1.0.0",
+	"version": "2.0.0",
 	"publisher": "JLitolff-WaikatoUni",
 	"private": false,
 	"license": "",
@@ -17,7 +17,8 @@
 		"Programming Languages"
 	],
 	"activationEvents": [
-		"*"
+		"onLanguage:wramp",
+		"onStartupFinished"
 	],
 	"main": "./out/extension.js",
 	"scripts": {
@@ -33,5 +34,109 @@
 		"@typescript-eslint/parser": "^5.42.0",
 		"eslint": "^8.26.0",
 		"typescript": "^4.9.4"
+	},
+	"contributes": {
+		"commands": [
+			{
+				"command": "wramp.build",
+				"title": "Assemble & Link",
+				"icon": "$(combine)"
+			}
+		],
+		"keybindings": [
+			{
+				"command": "wramp.build",
+				"key": "ctrl+alt+n"
+			}
+		],
+		"menus": {
+			"editor/context": [
+				{
+					"when": "!inOutput && config.wramp-runner.showRunCommandInEditorContextMenu",
+					"command": "wramp.build",
+					"group": "navigation"
+				}
+			],
+			"editor/title/run": [
+				{
+					"when": "config.wramp-runner.showRunIconInEditorTitleMenu && resourceLangId == wramp",
+					"command": "wramp.build",
+					"group": "navigation"
+				}
+			],
+			"explorer/context": [
+				{
+					"when": "!explorerResourceIsFolder && config.wramp-runner.showRunCommandInExplorerContextMenu",
+					"command": "wramp.build",
+					"group": "navigation"
+				}
+			]
+		},
+		"configuration": {
+			"type": "object",
+			"title": "WRAMP Intellisense configuration",
+			"properties": {
+				"wramp-runner.showRunIconInEditorTitleMenu": {
+					"type": "boolean",
+					"default": true,
+					"description": "Whether to show 'Run Code' icon in editor title menu.",
+					"scope": "resource"
+				},
+				"wramp-runner.showRunCommandInEditorContextMenu": {
+					"type": "boolean",
+					"default": true,
+					"description": "Whether to show 'Run Code' command in editor context menu.",
+					"scope": "resource"
+				},
+				"wramp-runner.showRunCommandInExplorerContextMenu": {
+					"type": "boolean",
+					"default": true,
+					"description": "Whether to show 'Run Code' command in explorer context menu.",
+					"scope": "resource"
+				},
+				"wramp-runner.fileDirectoryAsCwd": {
+					"type": "boolean",
+					"default": false,
+					"description": "Whether to use the directory of the file to be executed as the working directory.",
+					"scope": "resource"
+				},
+				"wramp-runner.saveAllFilesBeforeRun": {
+					"type": "boolean",
+					"default": false,
+					"description": "Whether to save all files before running.",
+					"scope": "resource"
+				},
+				"wramp-runner.saveFileBeforeRun": {
+					"type": "boolean",
+					"default": true,
+					"description": "Whether to save the current file before running.",
+					"scope": "resource"
+				},
+				"wramp-runner.preserveFocus": {
+					"type": "boolean",
+					"default": true,
+					"description": "Whether to preserve focus on code editor after code run is triggered.",
+					"scope": "resource"
+				},
+				"wramp-runner.clearPreviousOutput": {
+					"type": "boolean",
+					"default": false,
+					"description": "Whether to clear previous output before each run.",
+					"scope": "resource"
+				},
+				"wramp-runner.useIntegratedToolchain": {
+					"type": "boolean",
+					"default": true,
+					"description": "Whether to use the built in toolchain",
+					"scope": "resource"
+				},
+				"code-runner.cwd": {
+				  "type": "string",
+				  "default": "",
+				  "description": "Set the working directory.",
+				  "scope": "resource"
+				}
+			}
+		}
 	}
 }
