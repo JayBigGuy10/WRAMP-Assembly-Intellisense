@@ -162,7 +162,7 @@ export class CodeManager implements vscode.Disposable {
         if (this._terminal === null) {
             const icons: vscode.ThemeIcon = {id:"combine"};
             // eslint-disable-next-line prefer-const
-            let terminalOptions: vscode.TerminalOptions = { name: "WRAMP A&L", iconPath:icons };
+            let terminalOptions: vscode.TerminalOptions = { name: "WRAMP A&L", iconPath:icons, shellPath: "C:\\Windows\\System32\\cmd.exe" };
             this._terminal = vscode.window.createTerminal(terminalOptions);
 
             isNewTerminal = true;
