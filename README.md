@@ -1,18 +1,31 @@
 # WRAMP Assembly Intellisense
 
-This extension implements the provideHover and provideCompletionItems functions of IntelliSense into the editor for the WRAMP Assembly language.
+This extension implements the provideHover and provideCompletionItems functions of IntelliSense into the editor for the WRAMP Assembly language. 
+It also provides an "Assemble & Link" button in the editor titlebar menu.
+
 WRAMP was developed by the University of Waikato as an easy-to-learn architecture for teaching assembly language and basic processor concepts.
-
-
-
-![Sample](img/instruction%20suggest.png)
-
 
 ## Features
 
 Intellisense input suggestions will appear which contain all WRAMP Instruction set commands, as well as directives. The suggestions have accompanying documentation and use snippet strings which create input fields when needed, which can be tabbed between.
 
-Commands, Directives and system registers also have documentation which will display upon hover. Includes command parameters, type and function explanations
+Commands, Directives and system registers also have documentation which will display upon hover. Includes command parameters, type and function explanations.
+
+When in a WRAMP assembly file, a compile code button will be visible in the file header menu. By default this will run wasm assemble the current file and then link the single file into an srec. To specify any additional files which should be assembled at the same time as the current file (.s to .o), add this comment to the top of your file:
+
+```
+#wasm additionalFile1 additionalFile2
+```
+(Dont include file extensions. Don't add the current file to this comment, it will be done by default)
+
+To specify any additional files which should be linked to your assembled code (.o to .srec) add this comment at the top of your file. (Same syntax as wasm)
+```
+#wlink otherCodeFile LibraryFile
+```
+
+![Sample](img/coderunner.png)
+
+![Sample](img/instruction%20suggest.png)
 
 ![sample](img/directive-suggest.png)<br>
 *directive suggestions*<br>

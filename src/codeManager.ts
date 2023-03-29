@@ -49,6 +49,7 @@ export class CodeManager implements vscode.Disposable {
 
         const fileExtension = extname(this._document.fileName);
 
+        //code for using integrated toolchain if setting environment variables hadn't worked
         // let executor1: string;
         // let executor2: string;
 
@@ -76,12 +77,6 @@ export class CodeManager implements vscode.Disposable {
 
         const executor = executor1 + executor2;
 
-        // undefined or null
-        if (executor == null) {
-            vscode.window.showInformationMessage("Code language not supported or defined.");
-            return;
-        }
-
         this.getCodeFileAndExecute(fileExtension, executor, true);
     }
 
@@ -102,8 +97,6 @@ export class CodeManager implements vscode.Disposable {
         }
         return true;
     }
-
-
 
     private initialize(): void {
         this._config = this.getConfiguration("wramp-runner");
@@ -161,8 +154,6 @@ export class CodeManager implements vscode.Disposable {
                 this.executeCommand(executor, appendFile);
             });
         }
-
-
         this.executeCommand(executor, appendFile);
     }
 
@@ -174,8 +165,6 @@ export class CodeManager implements vscode.Disposable {
             let terminalOptions: vscode.TerminalOptions = { name: "WRAMP A&L", iconPath:icons };
             this._terminal = vscode.window.createTerminal(terminalOptions);
 
-            
-            
             isNewTerminal = true;
         }
         this._terminal.show(this._config.get<boolean>("preserveFocus"));

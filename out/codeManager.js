@@ -35,6 +35,7 @@ class CodeManager {
         }
         this.initialize();
         const fileExtension = (0, path_1.extname)(this._document.fileName);
+        //code for using integrated toolchain if setting environment variables hadn't worked
         // let executor1: string;
         // let executor2: string;
         // if (this._config.get<boolean>("useIntegratedToolchain")){
@@ -57,11 +58,6 @@ class CodeManager {
             });
         }
         const executor = executor1 + executor2;
-        // undefined or null
-        if (executor == null) {
-            vscode.window.showInformationMessage("Code language not supported or defined.");
-            return;
-        }
         this.getCodeFileAndExecute(fileExtension, executor, true);
     }
     dispose() {
