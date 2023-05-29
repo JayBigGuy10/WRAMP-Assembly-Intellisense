@@ -2,7 +2,7 @@
 	"name": "wramp-assembly-intellisense",
 	"displayName": "WRAMP Assembly Intellisense",
 	"icon": "img/icon.png",
-	"version": "2.1.0",
+	"version": "2.2.0",
 	"publisher": "JLitolff-WaikatoUni",
 	"private": false,
 	"license": "",
@@ -52,7 +52,7 @@
 		"menus": {
 			"editor/context": [
 				{
-					"when": "!inOutput && config.wramp-runner.showRunCommandInEditorContextMenu",
+					"when": "!inOutput && config.wramp-runner.showRunCommandInEditorContextMenu && resourceLangId == wramp",
 					"command": "wramp.build",
 					"group": "navigation"
 				}
@@ -66,7 +66,7 @@
 			],
 			"explorer/context": [
 				{
-					"when": "!explorerResourceIsFolder && config.wramp-runner.showRunCommandInExplorerContextMenu",
+					"when": "!explorerResourceIsFolder && config.wramp-runner.showRunCommandInExplorerContextMenu && resourceLangId == wramp",
 					"command": "wramp.build",
 					"group": "navigation"
 				}

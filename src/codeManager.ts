@@ -61,23 +61,42 @@ export class CodeManager implements vscode.Disposable {
         //     executor2 = " & wlink -o $fileNameWithoutExt.srec $fileNameWithoutExt.o ";
         // }
 
-        let executor1 = "wasm $fileName";
-        let executor2 = " & wlink -o $fileNameWithoutExt.srec $fileNameWithoutExt.o ";
+        if (this._config.get<boolean>("saveAllFilesBeforeRun")) {
+            vscode.workspace.saveAll();
+        }
+
+        else if (this._config.get<boolean>("saveFileBeforeRun")) {
+            this._document.save();
+        }
+
+        const executor1 = "wasm $fullFileName";
+        let executor2 = "wlink -o $openDir$fileNameWithoutExt.srec\" $openDir$fileNameWithoutExt.o\" ";
+
+        if (wlinkArgs[0] != '') {
+            wlinkArgs.forEach(argument => {
+                executor2 = executor2 + "$openDir"+argument + '.o\" ';
+            });
+        }
+        
+        const appendFile = true;
+        let selection;
+        const activeTextEditor = vscode.window.activeTextEditor;
+        if (activeTextEditor) {
+            selection = activeTextEditor.selection;
+        }
+
+        this._codeFile = this._document.fileName;
 
         if (wasmArgs[0] != '') {
             wasmArgs.forEach(argument => {
-                executor1 = executor1 + ' & wasm ' + argument + '.s';
+                //executor1 = executor1 + ' & wasm ' + argument + '.s';
+                this.executeCommand("wasm $openDir"+argument+".s\"",true);
             });
         }
-        if (wlinkArgs[0] != '') {
-            wlinkArgs.forEach(argument => {
-                executor2 = executor2 + argument + '.o ';
-            });
-        }
-
-        const executor = executor1 + executor2;
-
-        this.getCodeFileAndExecute(fileExtension, executor, true);
+        
+        this.executeCommand(executor1, appendFile);
+        this.executeCommand(executor2, appendFile);
+        
     }
 
     public dispose() {
@@ -134,35 +153,12 @@ export class CodeManager implements vscode.Disposable {
         }
     }
 
-    private getCodeFileAndExecute(fileExtension: string, executor: string, appendFile: boolean): any {
-        let selection;
-        const activeTextEditor = vscode.window.activeTextEditor;
-        if (activeTextEditor) {
-            selection = activeTextEditor.selection;
-        }
-
-        this._codeFile = this._document.fileName;
-
-        if (this._config.get<boolean>("saveAllFilesBeforeRun")) {
-            return vscode.workspace.saveAll().then(() => {
-                this.executeCommand(executor, appendFile);
-            });
-        }
-
-        if (this._config.get<boolean>("saveFileBeforeRun")) {
-            return this._document.save().then(() => {
-                this.executeCommand(executor, appendFile);
-            });
-        }
-        this.executeCommand(executor, appendFile);
-    }
-
     private async executeCommand(executor: string, appendFile: boolean) {
         let isNewTerminal = false;
         if (this._terminal === null) {
             const icons: vscode.ThemeIcon = {id:"combine"};
             // eslint-disable-next-line prefer-const
-            let terminalOptions: vscode.TerminalOptions = { name: "WRAMP A&L", iconPath:icons, shellPath: "C:\\Windows\\System32\\cmd.exe" };
+            let terminalOptions: vscode.TerminalOptions = { name: "WRAMP A&L", iconPath:icons }; //, shellPath: "C:\\Windows\\System32\\cmd.exe"
             this._terminal = vscode.window.createTerminal(terminalOptions);
 
             isNewTerminal = true;
@@ -233,6 +229,9 @@ export class CodeManager implements vscode.Disposable {
     private quoteFileName(fileName: string): string {
         return '\"' + fileName + '\"';
     }
+    private openQuoteFileName(fileName: string): string {
+        return '\"' + fileName;
+    }
 
     /**
      * Gets the executor to run a source code file
@@ -265,7 +264,8 @@ export class CodeManager implements vscode.Disposable {
                 // A placeholder that has to be replaced by the directory of the code file without a trailing slash
                 { regex: /\$dirWithoutTrailingSlash/g, replaceValue: this.quoteFileName(this.getCodeFileDirWithoutTrailingSlash()) },
                 // A placeholder that has to be replaced by the directory of the code file
-                { regex: /\$dir/g, replaceValue: this.quoteFileName(codeFileDir) }
+                { regex: /\$dir/g, replaceValue: this.quoteFileName(codeFileDir) },
+                { regex: /\$openDir/g, replaceValue: this.openQuoteFileName(codeFileDir) }
             ];
 
             placeholders.forEach((placeholder) => {
