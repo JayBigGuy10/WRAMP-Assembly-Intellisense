@@ -1,0 +1,2 @@
+SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
+mono $SCRIPTPATH/RexSimulatorGui.exe

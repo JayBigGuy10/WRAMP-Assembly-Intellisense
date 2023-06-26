@@ -4,6 +4,7 @@
 
 import * as vscode from 'vscode';
 import { CodeManager } from "./codeManager";
+import * as os from "os";
 export function activate(context: vscode.ExtensionContext) {
 
 	const provider1 = vscode.languages.registerCompletionItemProvider('wramp', {
@@ -1673,7 +1674,11 @@ It is similar to a #define directive in C. It will not define an area in memory,
 
 	//testing code running ability
 
-	context.environmentVariableCollection.append("PATH", ";" + context.extensionUri.fsPath + "/toolchain");
+	if (os.platform() === "win32") {
+		context.environmentVariableCollection.append("PATH", ";" + context.extensionUri.fsPath + "/toolchain-win");
+	} else {
+		context.environmentVariableCollection.append("PATH", ":" + context.extensionUri.fsPath + "/toolchain-unix");
+	}
 
 	const codeManager = new CodeManager();
 
