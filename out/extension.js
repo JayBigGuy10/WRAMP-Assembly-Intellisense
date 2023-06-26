@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.activate = void 0;
 const vscode = require("vscode");
 const codeManager_1 = require("./codeManager");
+const os = require("os");
 function activate(context) {
     const provider1 = vscode.languages.registerCompletionItemProvider('wramp', {
         provideCompletionItems(document, position, token, context) {
@@ -1578,7 +1579,12 @@ It is similar to a #define directive in C. It will not define an area in memory,
     });
     context.subscriptions.push(provider1, provider2, provider3);
     //testing code running ability
-    context.environmentVariableCollection.append("PATH", ";" + context.extensionUri.fsPath + "/toolchain");
+    if (os.platform() === "win32") {
+        context.environmentVariableCollection.append("PATH", ";" + context.extensionUri.fsPath + "/toolchain-win");
+    }
+    else {
+        context.environmentVariableCollection.append("PATH", ":" + context.extensionUri.fsPath + "/toolchain-unix");
+    }
     const codeManager = new codeManager_1.CodeManager();
     vscode.window.onDidCloseTerminal(() => {
         codeManager.onDidCloseTerminal();
