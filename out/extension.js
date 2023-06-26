@@ -11,7 +11,6 @@ const os = require("os");
 function activate(context) {
     const provider1 = vscode.languages.registerCompletionItemProvider('wramp', {
         provideCompletionItems(document, position, token, context) {
-            // a simple completion item which inserts `Hello World!`
             // eslint-disable-next-line prefer-const
             let items = [];
             //arithmetic ones

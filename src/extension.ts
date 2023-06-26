@@ -11,9 +11,6 @@ export function activate(this: any, context: vscode.ExtensionContext) {
 	const provider1 = vscode.languages.registerCompletionItemProvider('wramp', {
 
 		provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken, context: vscode.CompletionContext) {
-
-			// a simple completion item which inserts `Hello World!`
-
 			// eslint-disable-next-line prefer-const
 			let items: Array<vscode.CompletionItem> = [];
 
@@ -216,8 +213,6 @@ export function activate(this: any, context: vscode.ExtensionContext) {
 			laSnippet.documentation = laDocs;
 			items.push(laSnippet);
 
-
-
 			//bitwise boys
 			const andSnippet = new vscode.CompletionItem('and');
 			const andDocs: any = new vscode.MarkdownString();
@@ -316,10 +311,7 @@ export function activate(this: any, context: vscode.ExtensionContext) {
 			sraiSnippet.documentation = sraiDocs;
 			items.push(sraiSnippet);
 
-
-
 			//tests
-
 			const sltSnippet = new vscode.CompletionItem('slt');
 			const sltDocs: any = new vscode.MarkdownString();
 			sltSnippet.insertText = new vscode.SnippetString('slt $${1}, $${2}, $${3}');
@@ -513,8 +505,6 @@ export function activate(this: any, context: vscode.ExtensionContext) {
 			sneuiSnippet.documentation = sneuiDocs;
 			items.push(sneuiSnippet);
 
-
-
 			//branch
 			const jSnippet = new vscode.CompletionItem('j');
 			const jDocs: any = new vscode.MarkdownString();
@@ -567,8 +557,6 @@ export function activate(this: any, context: vscode.ExtensionContext) {
 			bnezSnippet.documentation = bnezDocs;
 			items.push(bnezSnippet);
 
-
-
 			//memory
 			const lwSnippet = new vscode.CompletionItem('lw');
 			const lwDocs: any = new vscode.MarkdownString();
@@ -590,7 +578,6 @@ export function activate(this: any, context: vscode.ExtensionContext) {
 			items.push(swSnippet);
 
 			//special boys
-
 			const movgsSnippet = new vscode.CompletionItem('movgs');
 			const movgsDocs: any = new vscode.MarkdownString();
 			movgsSnippet.insertText = new vscode.SnippetString('movgs $${1}, $${2}');
@@ -631,11 +618,6 @@ export function activate(this: any, context: vscode.ExtensionContext) {
 * Restore the saved interrupt enable and kernel/user mode bits and jump to the instruction at the address specified in the special register $ear `);
 			rfeSnippet.documentation = rfeDocs;
 			items.push(rfeSnippet);
-
-
-
-
-
 
 			// a completion item that inserts its text as snippet,
 			// the `insertText`-property is a `SnippetString` which will be
