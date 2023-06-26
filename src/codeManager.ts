@@ -153,7 +153,7 @@ export class CodeManager implements vscode.Disposable {
         }
     }
 
-    private async executeCommand(executor: string, appendFile: boolean) {
+    public async executeCommand(executor: string, appendFile: boolean) {
         let isNewTerminal = false;
         if (this._terminal === null) {
             const icons: vscode.ThemeIcon = {id:"combine"};

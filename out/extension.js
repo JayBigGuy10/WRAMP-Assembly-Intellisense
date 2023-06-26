@@ -1578,14 +1578,21 @@ It is similar to a #define directive in C. It will not define an area in memory,
         }
     });
     context.subscriptions.push(provider1, provider2, provider3);
+    const codeManager = new codeManager_1.CodeManager();
     //testing code running ability
     if (os.platform() === "win32") {
         context.environmentVariableCollection.append("PATH", ";" + context.extensionUri.fsPath + "/toolchain-win");
     }
     else {
         context.environmentVariableCollection.append("PATH", ":" + context.extensionUri.fsPath + "/toolchain-unix");
+        const icons = { id: "combine" };
+        // eslint-disable-next-line prefer-const
+        let terminalOptions = { name: "WRAMP A&L", iconPath: icons, hideFromUser: true };
+        this._terminal = vscode.window.createTerminal(terminalOptions);
+        this._terminal.sendText("chmod +x " + context.extensionUri.fsPath + "/toolchain-unix/*");
+        //vscode.window.showInformationMessage("chmod +x " + context.extensionUri.fsPath + "/toolchain-unix/*");
+        vscode.commands.executeCommand("workbench.action.terminal.clear");
     }
-    const codeManager = new codeManager_1.CodeManager();
     vscode.window.onDidCloseTerminal(() => {
         codeManager.onDidCloseTerminal();
     });
