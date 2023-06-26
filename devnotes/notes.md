@@ -31,3 +31,6 @@ lots and lots of stuff is bastardised from here
 very good stuff for a dumbass "learning" typescript
 - https://bobbyhadz.com/blog/typescript-argument-type-undefined-not-assignable-parameter-type-string
 - https://bobbyhadz.com/blog/typescript-remove-element-from-array#remove-the-first-element-from-an-array
+
+# TODO
+- modify wsim, and use launch args, or clipboard functionality to auto load file into wsim

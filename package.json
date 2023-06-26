@@ -127,7 +127,7 @@
 				"wramp-runner.useIntegratedToolchain": {
 					"type": "boolean",
 					"default": true,
-					"description": "Whether to use the built in toolchain",
+					"description": "Whether to use the built in toolchain (May need window reload or system reboot upon change)",
 					"scope": "resource"
 				},
 				"wramp-runner.cwd": {
