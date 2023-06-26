@@ -2,7 +2,7 @@
 	"name": "wramp-assembly-intellisense",
 	"displayName": "WRAMP Assembly Intellisense",
 	"icon": "img/icon.png",
-	"version": "2.3.6",
+	"version": "2.3.7",
 	"publisher": "JLitolff-WaikatoUni",
 	"private": false,
 	"license": "",
@@ -130,7 +130,7 @@
 					"description": "Whether to use the built in toolchain",
 					"scope": "resource"
 				},
-				"code-runner.cwd": {
+				"wramp-runner.cwd": {
 				  "type": "string",
 				  "default": "",
 				  "description": "Set the working directory.",
