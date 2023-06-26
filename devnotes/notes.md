@@ -34,3 +34,4 @@ very good stuff for a dumbass "learning" typescript
 
 # TODO
 - modify wsim, and use launch args, or clipboard functionality to auto load file into wsim
+- fix the issue if you try and build a file with less than 2 lines
