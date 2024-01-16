@@ -66,5 +66,7 @@ https://code.visualstudio.com/api/references/vscode-api#languages.registerComple
 - [`languages.registerCompletionItemProvider`](https://code.visualstudio.com/api/references/vscode-api#languages.registerCompletionItemProvider)
 - [`languages.registerHoverProvider`](https://code.visualstudio.com/api/references/vscode-api#languages.registerHoverProvider)
 
+find the published extension here: https://marketplace.visualstudio.com/items?itemName=JLitolff-WaikatoUni.wramp-assembly-intellisense
+
 
 
