@@ -1,0 +1,2 @@
+#!/bin/sh
+mono /home/compx203/bin/mono/OiServer.exe 33333

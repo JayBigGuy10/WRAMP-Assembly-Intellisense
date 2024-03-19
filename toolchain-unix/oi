@@ -1,0 +1,2 @@
+#!/bin/sh
+mono /home/compx203/bin/mono/OiClient.exe cms-rg06-84 33333
