@@ -1707,11 +1707,43 @@ It is similar to a #define directive in C. It will not define an area in memory,
 				wlinkArgs.shift();
 			}
 
-			codeManager.run(fileUri, wasmArgs, wlinkArgs, context.extensionUri);
+			codeManager.run(fileUri, wasmArgs, wlinkArgs, context.extensionUri, false);
 		}
 
 	});
 	context.subscriptions.push(build);
+
+	const buildAndRun = vscode.commands.registerCommand("wramp.buildAndRun", (fileUri: vscode.Uri) => {
+
+		//reset path string
+		//only works on jaydens zephyurus, obvs
+		//context.environmentVariableCollection.replace("PATH","PATH=C:\\Python311\\Scripts\\;C:\\Python311\\;D:\\Oculus\\Support\\oculus-runtime;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\Windows\\System32\\OpenSSH\\;C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common;C:\\Program Files\\Microsoft VS Code\\bin;C:\\Program Files\\Git\\cmd;C:\\Program Files\\Git LFS;C:\\Program Files (x86)\\Tailscale IPN;C:\\Program Files\\NVIDIA Corporation\\NVIDIA NvDLISR;C:\\Program Files\\Microsoft SQL Server\\150\\Tools\\Binn\\;C:\\Program Files\\Microsoft SQL Server\\Client SDK\\ODBC\\170\\Tools\\Binn\\;C:\\Program Files\\dotnet\\;C:\\Program Files (x86)\\PDFtk\\bin\\;C:\\Program Files\\MATLAB\\R2022b\\bin;C:\\Program Files (x86)\\Microsoft SQL Server\\160\\Tools\\Binn\\;C:\\Program Files\\Microsoft SQL Server\\160\\Tools\\Binn\\;C:\\Program Files\\Microsoft SQL Server\\160\\DTS\\Binn\\;C:\\Program Files (x86)\\Microsoft SQL Server\\160\\DTS\\Binn\\;C:\\Program Files\\Azure Data Studio\\bin;C:\\Users\\Jayden Litolff\\Documents\\Uni\\COMPX203\\toolchain-win-3.0.1[UNZIP];C:\\Users\\Jayden Litolff\\AppData\\Local\\Microsoft\\WindowsApps;C:\\Users\\Jayden;C:\\Program Files\\nodejs\\;C:\\ProgramData\\chocolatey\\bin;C:\\Users\\Jayden Litolff\\AppData\\Local\\Microsoft\\WindowsApps;C:\\Users\\Jayden Litolff\\.dotnet\\tools;C:\\Program Files\\Azure Data Studio\\bin;C:\\Users\\Jayden Litolff\\Documents\\Uni\\COMPX203\\toolchain-win-3.0.1;C:\\Users\\Jayden Litolff\\AppData\\Roaming\\npm");
+		const commentLineOne = vscode.window.activeTextEditor?.document.lineAt(0).text;
+		const commentLineTwo = vscode.window.activeTextEditor?.document.lineAt(1).text;
+		let wasmArgs: string[] = [''];
+		let wlinkArgs: string[] = [''];
+		if (commentLineOne != undefined && commentLineTwo != undefined) {
+			if (commentLineOne.startsWith('#wasm')) {
+				wasmArgs = commentLineOne.split(' ');
+				wasmArgs.shift();
+			} else if (commentLineTwo.startsWith('#wasm')) {
+				wasmArgs = commentLineTwo.split(' ');
+				wasmArgs.shift();
+			}
+
+			if (commentLineTwo.startsWith('#wlink')) {
+				wlinkArgs = commentLineTwo.split(' ');
+				wlinkArgs.shift();
+			} else if (commentLineOne.startsWith('#wlink')) {
+				wlinkArgs = commentLineOne.split(' ');
+				wlinkArgs.shift();
+			}
+
+			codeManager.run(fileUri, wasmArgs, wlinkArgs, context.extensionUri, true);
+		}
+
+	});
+	context.subscriptions.push(buildAndRun);
 
 
 }

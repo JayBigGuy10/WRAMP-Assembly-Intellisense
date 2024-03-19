@@ -14,7 +14,7 @@ class CodeManager {
     onDidCloseTerminal() {
         this._terminal = null;
     }
-    async run(fileUri, wasmArgs, wlinkArgs, extensionLocation) {
+    async run(fileUri, wasmArgs, wlinkArgs, extensionLocation, runInWSIM) {
         if (this._isRunning) {
             vscode.window.showInformationMessage("Code is already running!");
             return;
@@ -73,6 +73,10 @@ class CodeManager {
         }
         this.executeCommand(executor1, appendFile);
         this.executeCommand(executor2, appendFile);
+        if (runInWSIM) {
+            const executor3 = "wsim $openDir$fileNameWithoutExt.srec\"";
+            this.executeCommand(executor3, appendFile);
+        }
     }
     dispose() {
         vscode.window.showInformationMessage('WRAMP code manager was disposed');

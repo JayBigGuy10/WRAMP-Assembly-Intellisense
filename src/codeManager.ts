@@ -26,7 +26,7 @@ export class CodeManager implements vscode.Disposable {
         this._terminal = null;
     }
 
-    public async run(fileUri: vscode.Uri, wasmArgs: string[], wlinkArgs: string[], extensionLocation: vscode.Uri) {
+    public async run(fileUri: vscode.Uri, wasmArgs: string[], wlinkArgs: string[], extensionLocation: vscode.Uri, runInWSIM: boolean) {
         if (this._isRunning) {
             vscode.window.showInformationMessage("Code is already running!");
             return;
@@ -96,6 +96,11 @@ export class CodeManager implements vscode.Disposable {
         
         this.executeCommand(executor1, appendFile);
         this.executeCommand(executor2, appendFile);
+
+        if(runInWSIM){
+            const executor3 = "wsim $openDir$fileNameWithoutExt.srec\"";
+            this.executeCommand(executor3, appendFile);
+        }
         
     }
 
