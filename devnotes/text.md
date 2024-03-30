@@ -31,6 +31,505 @@ rfe
 Restore the saved interrupt enable and kernel/user mode bits and jump to the instruction at the address
 specified in the special register $ear
 
+Addition
+add Rd, Rs, Rt
+0000 Rd Rs 0000 0000 0000 0000 Rt
+4 4 4 4 12 4
+Put the sum of register Rs and register Rt
+into register Rd. Generate an overflow exception on signed
+overflow.
+
+Addition, immediate
+addi Rd, Rs, Immediate
+0001 Rd Rs 0000 Immediate
+4 4 4 4 16
+Put the sum of register Rs and the sign-extended immediate into register Rd. Generate an overflow
+exception on signed overflow.
+
+Addition, unsigned
+addu Rd, Rs, Rt
+0000 Rd Rs 0001 0000 0000 0000 Rt
+4 4 4 4 12 4
+Put the sum of register Rs and register Rt
+into register Rd. Generate an overflow exception on unsigned
+overflow.
+
+Addition, unsigned, immediate
+addui Rd, Rs, Immediate
+0001 Rd Rs 0001 Immediate
+4 4 4 4 16
+Put the sum of register Rs and the zero-extended immediate into register Rd. Generate an overflow
+exception on unsigned overflow.
+
+Subtraction
+sub Rd, Rs, Rt
+0000 Rd Rs 0010 0000 0000 0000 Rt
+4 4 4 4 12 4
+Put the difference of register Rs and register Rt
+into register Rd. Generate an overflow exception on
+signed overflow.
+
+Subtraction, immediate
+subi Rd, Rs, Immediate
+0001 Rd Rs 0010 Immediate
+4 4 4 4 16
+Put the difference of register Rs and the sign-extended immediate into register Rd. Generate an overflow
+exception on signed overflow.
+
+Subtraction, unsigned
+subu Rd, Rs, Rt
+0000 Rd Rs 0011 0000 0000 0000 Rt
+4 4 4 4 12 4
+Put the difference of register Rs and register Rt
+into register Rd. Generate an overflow exception on
+unsigned overflow.
+
+Subtraction, unsigned, immediate
+subui Rd, Rs, Immediate
+0001 Rd Rs 0011 Immediate
+4 4 4 4 16
+Put the difference of register Rs and the zero-extended immediate into register Rd. Generate an overflow
+exception on unsigned overflow.
+
+Multiplication
+mult Rd, Rs, Rt
+0000 Rd Rs 0100 0000 0000 0000 Rt
+4 4 4 4 12 4
+Put the product of the signed multiplication of register Rs and register Rt
+into register Rd. Generate an
+overflow exception on signed overflow.
+
+Multiplication, immediate
+multi Rd, Rs, Immediate
+0001 Rd Rs 0100 Immediate
+4 4 4 4 16
+Put the product of the signed multiplication of register Rs and the sign-extended immediate into register
+Rd. Generate an overflow exception on signed overflow.
+
+Multiplication, unsigned
+multu Rd, Rs, Rt
+0000 Rd Rs 0101 0000 0000 0000 Rt
+4 4 4 4 12 4
+Put the product of the unsigned multiplication of register Rs and register Rt
+into register Rd. Generate
+an overflow exception on unsigned overflow.
+
+Multiplication, unsigned, immediate
+multui Rd, Rs, Immediate
+0001 Rd Rs 0101 Immediate
+4 4 4 4 16
+Put the product of the unsigned multiplication of register Rs and the zero-extended immediate into
+register Rd. Generate an overflow exception on unsigned overflow.
+
+Division
+div Rd, Rs, Rt
+0000 Rd Rs 0110 0000 0000 0000 Rt
+4 4 4 4 12 4
+Put the result of the signed integer division of register Rs by register Rt
+into register Rd. Generate a
+divide-by-zero exception if the contents of Rt
+is zero.
+
+Division, immediate
+divi Rd, Rs, Immediate
+0001 Rd Rs 0110 Immediate
+4 4 4 4 16
+Put the result of the signed integer division of register Rs by the sign-extended immediate into register
+Rd. Generate a divide-by-zero exception if the immediate value is zero.
+
+Division, unsigned
+divu Rd, Rs, Rt
+0000 Rd Rs 0111 0000 0000 0000 Rt
+4 4 4 4 12 4
+Put the result of the unsigned division of register Rs by register Rt
+into register Rd. Generate a
+divide-by-zero exception if the contents of Rt
+is zero.
+
+Division, unsigned, immediate
+divui Rd, Rs, Immediate
+0001 Rd Rs 0111 Immediate
+4 4 4 4 16
+Put the result of the unsigned division of register Rs by the zero-extended immediate into register Rd.
+Generate a divide-by-zero exception if the immediate value is zero.
+
+Remainder
+rem Rd, Rs, Rt
+0000 Rd Rs 1000 0000 0000 0000 Rt
+4 4 4 4 12 4
+Put the remainder of the signed division of register Rs by register Rt
+into register Rd. Generate a
+divide-by-zero exception if the contents of Rt
+is zero.
+
+Remainder, immediate
+remi Rd, Rs, Immediate
+0001 Rd Rs 1000 Immediate
+4 4 4 4 16
+Put the remainder of the signed division of register Rs by the sign-extended immediate into register Rd.
+Generate a divide-by-zero exception if the immediate value is zero.
+
+Remainder, unsigned
+remu Rd, Rs, Rt
+0000 Rd Rs 1001 0000 0000 0000 Rt
+4 4 4 4 12 4
+Put the remainder of the unsigned division of register Rs by the register Rt
+into register Rd. Generate a
+divide-by-zero exception if the contents of Rt
+is zero.
+
+Remainder, unsigned, immediate
+remui Rd, Rs, Immediate
+0001 Rd Rs 1001 Immediate
+4 4 4 4 16
+Put the remainder of the unsigned division of register Rs by the zero-extended immediate into register Rd.
+Generate a divide-by-zero exception if the immediate value is zero.
+
+Load high immediate
+lhi Rd, Immediate
+0011 Rd 0000 1110 Immediate
+4 4 4 4 16
+Put the 16 bit immediate into the upper 16 bits of register Rd, and set the lower 16 bits to zero.
+
+Load address
+la Rd, Address
+1100 Rd 0000 Address
+4 4 4 20
+Put the zero-extended 20 bit address into register Rd.
+
+And
+and Rd, Rs, Rt
+0000 Rd Rs 1011 0000 0000 0000 Rt
+4 4 4 4 12 4
+Put the result of the logical AND of registers Rs and Rt
+into register Rd.
+
+And, immediate
+andi Rd, Rs, Immediate
+0001 Rd Rs 1011 Immediate
+4 4 4 4 16
+Put the result of the logical AND of register Rs and the zero-extended immediate into register Rd.
+
+Or
+or Rd, Rs, Rt
+0000 Rd Rs 1101 0000 0000 0000 Rt
+4 4 4 4 12 4
+Put the result of the logical OR of registers Rs and Rt
+into register Rd.
+
+Or, immediate
+ori Rd, Rs, Immediate
+0001 Rd Rs 1101 Immediate
+4 4 4 4 16
+Put the result of the logical OR of register Rs and the zero-extended immediate into register Rd.
+
+Xor
+xor Rd, Rs, Rt
+0000 Rd Rs 1111 0000 0000 0000 Rt
+4 4 4 4 12 4
+Put the result of the logical exclusive-OR of registers Rs and Rt
+into register Rd.
+
+Xor, immediate
+xori Rd, Rs, Immediate
+0001 Rd Rs 1111 Immediate
+4 4 4 4 16
+Put the result of the logical exclusive-OR of register Rs and the zero-extended immediate into register Rd.
+
+Shift left logical
+sll Rd, Rs, Rt
+0000 Rd Rs 1010 0000 0000 0000 Rt
+4 4 4 4 12 4
+Shift the value in register Rs
+left by the unsigned value given by the least significant 5 bits of register Rt,
+and put the result in register Rd, inserting zeros into the low order bits.
+
+Shift left logical, immediate
+slli Rd, Rs, Immediate
+0001 Rd Rs 1010 Immediate
+4 4 4 4 16
+Shift the value in register Rs
+left by the unsigned value given by the least significant 5 bits of the immediate,
+and put the result in register Rd, inserting zeros into the low order bits.
+
+Shift right logical
+srl Rd, Rs, Rt
+0000 Rd Rs 1100 0000 0000 0000 Rt
+4 4 4 4 12 4
+Shift the value in register Rs
+right by the unsigned value given by the least significant 5 bits of register
+Rt, and place the result in register Rd, inserting zeros into the high order bits.
+
+Shift right logical, immediate
+srli Rd, Rs, Immediate
+0001 Rd Rs 1100 Immediate
+4 4 4 4 16
+Shift the value in register Rs
+right by the unsigned value given by the least significant 5 bits of the
+immediate, and place the result in register Rd, inserting zeros into the high order bits.
+
+Shift right arithmetic
+sra Rd, Rs, Rt
+0000 Rd Rs 1110 0000 0000 0000 Rt
+4 4 4 4 12 4
+Shift the value in register Rs
+right by the unsigned value given by the least significant 5 bits of register
+Rt, and place the result in register Rd, sign-extending the high order bits.
+
+Shift right arithmetic, immediate
+srai Rd, Rs, Immediate
+0001 Rd Rs 1110 Immediate
+4 4 4 4 16
+Shift the value in register Rs
+right by the unsigned value given by the least significant 5 bits of the
+immediate, and place the result in register Rd, sign-extending the high order bits.
+
+Jump
+j Address
+0100 0000 0000 Address
+4 4 4 20
+Unconditionally jump to the instruction whose address is given by the address field.
+
+Jump to register
+jr Rs
+0101 0000 Rs 0000 0000 0000 0000 0000
+4 4 4 20
+Unconditionally jump to the instruction whose address is in the least significant 20 bits of register Rs.
+
+Jump and link
+jal Address
+0110 0000 0000 Address
+4 4 4 20
+Unconditionally jump to the instruction whose address is given by the address field. Save the address of
+the next instruction in register $ra.
+
+Jump and link register
+jalr Rs
+0111 0000 Rs 0000 0000 0000 0000 0000
+4 4 4 20
+Unconditionally jump to the instruction whose address is in the least significant 20 bits of register Rs.
+Save the address of the next instruction in register $ra.
+
+Branch on equal to zero
+beqz Rs, Offset
+1010 0000 Rs Offset
+4 4 4 20
+Conditionally branch the number of instructions specified by the sign-extended offset if register Rs
+is
+equal to 0.
+
+Branch on not equal to zero
+bnez Rs, Offset
+1011 0000 Rs Offset
+4 4 4 20
+Conditionally branch the number of instructions specified by the sign-extended offset if register Rs
+is not
+equal to 0.
+
+Load word
+lw Rd, Offset(Rs)
+1000 Rd Rs Offset
+4 4 4 20
+Add the contents of register Rs and the sign-extended offset to give an effective address. Load the contents
+of the memory location specified by this effective address into register Rd.
+
+Store word
+sw Rd, Offset(Rs)
+1001 Rd Rs Offset
+4 4 4 20
+Add the contents of register Rs and the sign-extended offset to give an effective address. Store the contents
+of register Rd into the memory location specified by this effective address.
+
+Set on less than
+slt Rd, Rs, Rt
+0010 Rd Rs 0000 0000 0000 0000 Rt
+4 4 4 4 12 4
+Set register Rd to 1 if register Rs
+is less than register Rt according to a signed comparison, and 0 otherwise.
+
+Set on less than immediate
+slti Rd, Rs, Immediate
+0011 Rd Rs 0000 Immediate
+4 4 4 4 16
+Set register Rd to 1 if register Rs
+is less than the sign-extended immediate according to a signed comparison,
+and 0 otherwise.
+
+Set on less than, unsigned
+sltu Rd, Rs, Rt
+0010 Rd Rs 0001 0000 0000 0000 Rt
+4 4 4 4 12 4
+Set register Rd to 1 if register Rs
+is less than register Rt according to an unsigned comparison, and 0
+otherwise.
+
+Set on less than, unsigned, immediate
+sltui Rd, Rs, Immediate
+0011 Rd Rs 0001 Immediate
+4 4 4 4 16
+Set register Rd to 1 if register Rs
+is less than the zero-extended immediate according to an unsigned
+comparison, and 0 otherwise.
+
+Set on greater than
+sgt Rd, Rs, Rt
+0010 Rd Rs 0010 0000 0000 0000 Rt
+4 4 4 4 12 4
+Set register Rd to 1 if register Rs
+is greater than register Rt according to a signed comparison, and 0
+otherwise.
+
+Set on greater than, immediate
+sgti Rd, Rs, Immediate
+0011 Rd Rs 0010 Immediate
+4 4 4 4 16
+Set register Rd to 1 if register Rs
+is greater than the sign-extended immediate according to a signed
+comparison, and 0 otherwise.
+
+Set on greater than, unsigned
+sgtu Rd, Rs, Rt
+0010 Rd Rs 0011 0000 0000 0000 Rt
+4 4 4 4 12 4
+Set register Rd to 1 if register Rs
+is greater than register Rt according to an unsigned comparison, and 0
+otherwise.
+
+Set on greater than, unsigned, immediate
+sgtui Rd, Rs, Immediate
+0011 Rd Rs 0011 Immediate
+4 4 4 4 16
+Set register Rd to 1 if register Rs
+is greater than the zero-extended immediate according to an unsigned
+comparison, and 0 otherwise.
+
+Set on less than or equal to
+sle Rd, Rs, Rt
+0010 Rd Rs 0100 0000 0000 0000 Rt
+4 4 4 4 12 4
+Set register Rd to 1 if register Rs
+is less than or equal to register Rt according to a signed comparison,
+and 0 otherwise.
+
+Set on less than or equal to, immediate
+slei Rd, Rs, Immediate
+0011 Rd Rs 0100 Immediate
+4 4 4 4 16
+Set register Rd to 1 if register Rs
+is less than or equal to the sign-extended immediate according to a
+signed comparison, and 0 otherwise.
+
+Set on less than or equal to, unsigned
+sleu Rd, Rs, Rt
+0010 Rd Rs 0101 0000 0000 0000 Rt
+4 4 4 4 12 4
+Set register Rd to 1 if register Rs
+is less than or equal to register Rt according to an unsigned comparison,
+and 0 otherwise.
+
+Set on less than or equal to, unsigned, immediate
+sleui Rd, Rs, Immediate
+0011 Rd Rs 0101 Immediate
+4 4 4 4 16
+Set register Rd to 1 if register Rs
+is less than or equal to the zero-extended immediate according to an
+unsigned comparison, and 0 otherwise.
+
+Set on greater than or equal to
+sge Rd, Rs, Rt
+0010 Rd Rs 0110 0000 0000 0000 Rt
+4 4 4 4 12 4
+Set register Rd to 1 if register Rs
+is greater than or equal to register Rt according to a signed comparison,
+and 0 otherwise.
+
+Set on greater than or equal to immediate
+sgei Rd, Rs, Immediate
+0011 Rd Rs 0110 Immediate
+4 4 4 4 16
+Set register Rd to 1 if register Rs
+is greater than or equal to the sign-extended immediate according to a
+signed comparison, and 0 otherwise.
+
+Set on greater than or equal to, unsigned
+sgeu Rd, Rs, Rt
+0010 Rd Rs 0111 0000 0000 0000 Rt
+4 4 4 4 12 4
+Set register Rd to 1 if register Rs
+is greater than or equal to register Rt according to an unsigned
+comparison, and 0 otherwise.
+
+Set on greater than or equal to, unsigned, immediate
+sgeui Rd, Rs, Immediate
+0011 Rd Rs 0111 Immediate
+4 4 4 4 16
+Set register Rd to 1 if register Rs
+is greater than or equal to the zero-extended immediate according to an
+unsigned comparison, and 0 otherwise.
+
+Set on equal to
+seq Rd, Rs, Rt
+0010 Rd Rs 1000 0000 0000 0000 Rt
+4 4 4 4 12 4
+Set register Rd to 1 if register Rs
+is equal to register Rt according to a signed comparison, and 0 otherwise.
+
+Set on equal to immediate
+seqi Rd, Rs, Immediate
+0011 Rd Rs 1000 Immediate
+4 4 4 4 16
+Set register Rd to 1 if register Rs
+is equal to the sign-extended immediate according to a signed comparison,
+and 0 otherwise.
+
+Set on equal to, unsigned
+sequ Rd, Rs, Rt
+0010 Rd Rs 1001 0000 0000 0000 Rt
+4 4 4 4 12 4
+Set register Rd to 1 if register Rs
+is equal to register Rt according to an unsigned comparison, and 0
+otherwise.
+
+Set on equal to, unsigned, immediate
+sequi Rd, Rs, Immediate
+0011 Rd Rs 1001 Immediate
+4 4 4 4 16
+Set register Rd to 1 if register Rs
+is equal to the zero-extended immediate according to an unsigned
+comparison, and 0 otherwise.
+
+Set on not equal to
+sne Rd, Rs, Rt
+0010 Rd Rs 1010 0000 0000 0000 Rt
+4 4 4 4 12 4
+Set register Rd to 1 if register Rs
+is not equal to register Rt according to a signed comparison, and 0
+otherwise.
+
+Set on not equal to immediate
+snei Rd, Rs, Immediate
+0011 Rd Rs 1010 Immediate
+4 4 4 4 16
+Set register Rd to 1 if register Rs
+is not equal to the sign-extended immediate according to a signed
+comparison, and 0 otherwise.
+
+Set on not equal to, unsigned
+sneu Rd, Rs, Rt
+0010 Rd Rs 1011 0000 0000 0000 Rt
+4 4 4 4 12 4
+Set register Rd to 1 if register Rs
+is not equal to register Rt according to an unsigned comparison, and 0
+otherwise.
+
+Set on not equal to, unsigned, immediate
+sneui Rd, Rs, Immediate
+0011 Rd Rs 1011 Immediate
+4 4 4 4 16
+Set register Rd to 1 if register Rs
+is not equal to the zero-extended immediate according to an unsigned
+comparison, and 0 otherwise.
+
 
 
 

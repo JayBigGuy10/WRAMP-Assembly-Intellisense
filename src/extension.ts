@@ -6,6 +6,9 @@
 import * as vscode from 'vscode';
 import { CodeManager } from "./codeManager";
 import * as os from "os";
+
+let myStatusBarItem: vscode.StatusBarItem;
+
 export function activate(this: any, context: vscode.ExtensionContext) {
 
 	const provider1 = vscode.languages.registerCompletionItemProvider('wramp', {
@@ -1746,8 +1749,61 @@ It is similar to a #define directive in C. It will not define an area in memory,
 	context.subscriptions.push(buildAndRun);
 
 
+	//count shit chip
+
+
+	// create a new status bar item that we can now manage
+	myStatusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, -1000000);
+	myStatusBarItem.tooltip = "Number Of WRAMP Instructions\nNumber of lines minus comments or blank";
+	context.subscriptions.push(myStatusBarItem);
+
+	// register some listener that make sure the status bar 
+	// item always up-to-date
+	context.subscriptions.push(vscode.window.onDidChangeActiveTextEditor(updateStatusBarItem));
+	context.subscriptions.push(vscode.window.onDidChangeTextEditorSelection(updateStatusBarItem));
+
+	// update status bar item once at start
+	updateStatusBarItem();
+
 }
 
+function updateStatusBarItem(): void {
+	const n = getCommandCount(vscode.window.activeTextEditor);
+	if (n[0] > 0 && n[1] > 0 && vscode.window.activeTextEditor?.document.languageId === "wramp") {
+		myStatusBarItem.text = `$(symbol-ruler) ${n[0]} Instructions, ${n[1]} LOC`;
+		myStatusBarItem.show();
+	} else {
+		myStatusBarItem.hide();
+	}
+}
 
+function getNumberOfSelectedLines(editor: vscode.TextEditor | undefined): number {
+	let lines = 0;
+	if (editor) {
+		lines = editor.selections.reduce((prev, curr) => prev + (curr.end.line - curr.start.line), 0);
+	}
+	return lines;
+}
+
+function getCommandCount(editor: vscode.TextEditor | undefined): number[] {
+
+	let commands = ['movgs','movsg','break','syscall','rfe','add','addi','addu','addui','sub','subi','subu','subui','mult','multi','multu','multui','div','divi','divu','divui','rem','remi','remu','remui','lhi','la','and','andi','or','ori','xor','xori','sll','slli','srl','srli','sra','srai','j','jr','jal','jalr','beqz','bnez','lw','sw','slt','slti','sltu','sltui','sgt','sgti','sgtu','sgtui','sle','slei','sleu','sleui','sge','sgei','sgeu','sgeui','seq','seqi','sequ','sequi','sne','snei','sneu','sneui'];
+	let cmdCounter = 0;
+	let LOC = 0;
+	let lines = editor?.document.getText().split("\n");
+	lines?.forEach(line => {
+		line = line.replace(/\t/g, ' ').trimStart();
+
+		if (!line.startsWith("#") && line.trim() != ''){
+			LOC++;
+			line = line.split(" ")[0].split("$")[0];
+			if (commands.find(command => command == line) != undefined){
+				cmdCounter++;
+			}
+		}
+	});
+
+	return [cmdCounter, LOC];
+}
 
 

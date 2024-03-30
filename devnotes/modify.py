@@ -1,12 +1,12 @@
 f = open("text.md", "r")
 
-f2 = open("text2.md", "w")
+f2 = open("allcmds.md", "w")
 
 i=0
 
 while True:
 	i=i+1
-	if (i == 40):
+	if (i == 133):
 		break
 
 	print(i)
@@ -60,11 +60,11 @@ while True:
 		return new vscode.Hover(markdown, new vscode.Range(position, position));"""
 	var2 = "}"
 
-	
 
-	output = var0 + var1 + var +var2
-	print(output)
-	f2.write(output + "\n")
+	#output = var0 + var1 + var +var2
+	#print(output)
+	#f2.write(output + "\n")
+	f2.write(match[0]+"','")
 
 f2.close()
 f.close()
