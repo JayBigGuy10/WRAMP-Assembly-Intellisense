@@ -1792,7 +1792,7 @@ function getCommandCount(editor: vscode.TextEditor | undefined): number[] {
 	let LOC = 0;
 	let lines = editor?.document.getText().split("\n");
 	lines?.forEach(line => {
-		line = line.replace(/\t/g, ' ').trimStart();
+		line = line.replace(/\t/g, ' ').replace(/\r/g, ' ').replace(/\n/g, ' ').trimStart();
 
 		if (!line.startsWith("#") && line.trim() != ''){
 			LOC++;
