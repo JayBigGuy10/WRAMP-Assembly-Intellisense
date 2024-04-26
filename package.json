@@ -2,7 +2,7 @@
 	"name": "wramp-assembly-intellisense",
 	"displayName": "WRAMP Assembly Intellisense",
 	"icon": "img/icon.png",
-	"version": "3.2.1",
+	"version": "3.2.2",
 	"publisher": "JLitolff-WaikatoUni",
 	"private": false,
 	"license": "",

@@ -1740,15 +1740,14 @@ function validateMemorySafety() {
     });
     if (stackDiff < 0) {
         //vscode.window.showErrorMessage("This Program will overFlow");
-        addMessageToProblemView("This program may overflow, more space is pushed onto the stack (subi/subui) than is popped off (addi/addui). [Assuming all statements manipulating $sp run only once]", vscode.DiagnosticSeverity.Warning);
+        addMessageToProblemView("This program may overflow, more space is pushed onto the stack (subi/subui) than is popped off (addi/addui) by " + Math.abs(stackDiff) + ". [Assuming all statements manipulating $sp run only once]", vscode.DiagnosticSeverity.Warning);
     }
     else if (stackDiff > 0) {
         //vscode.window.showErrorMessage("This will overwite the stack incorrectly");
-        addMessageToProblemView("This program may overwrite the stack incorrectly, more space is popped off the stack (addi/addui) than is pushed on (subi/subui). [Assuming all statements manipulating $sp run only once]", vscode.DiagnosticSeverity.Warning);
+        addMessageToProblemView("This program may overwrite the stack incorrectly, more space is popped off the stack (addi/addui) than is pushed on (subi/subui) by " + Math.abs(stackDiff) + ". [Assuming all statements manipulating $sp run only once]", vscode.DiagnosticSeverity.Warning);
     }
     else if (stackDiff == 0) {
         clearMessagesFromProblemView();
-        vscode.commands.executeCommand('workbench.actions.hide.problems');
     }
 }
 // Create a diagnostic collection to store diagnostics
