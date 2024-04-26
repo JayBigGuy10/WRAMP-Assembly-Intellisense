@@ -1777,14 +1777,6 @@ function updateStatusBarItem(): void {
 	}
 }
 
-function getNumberOfSelectedLines(editor: vscode.TextEditor | undefined): number {
-	let lines = 0;
-	if (editor) {
-		lines = editor.selections.reduce((prev, curr) => prev + (curr.end.line - curr.start.line), 0);
-	}
-	return lines;
-}
-
 function getCommandCount(editor: vscode.TextEditor | undefined): number[] {
 
 	let commands = ['movgs','movsg','break','syscall','rfe','add','addi','addu','addui','sub','subi','subu','subui','mult','multi','multu','multui','div','divi','divu','divui','rem','remi','remu','remui','lhi','la','and','andi','or','ori','xor','xori','sll','slli','srl','srli','sra','srai','j','jr','jal','jalr','beqz','bnez','lw','sw','slt','slti','sltu','sltui','sgt','sgti','sgtu','sgtui','sle','slei','sleu','sleui','sge','sgei','sgeu','sgeui','seq','seqi','sequ','sequi','sne','snei','sneu','sneui'];
