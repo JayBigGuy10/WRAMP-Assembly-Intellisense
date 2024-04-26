@@ -783,7 +783,7 @@ export function activate(this: any, context: vscode.ExtensionContext) {
 	vscode.languages.registerHoverProvider('wramp', {
 		provideHover(document: { getWordRangeAtPosition: (arg0: any, arg1: RegExp | undefined) => any; getText: (arg0: any) => any; }, position: any, token: any) {
 
-			const range = document.getWordRangeAtPosition(position);
+			const range = document.getWordRangeAtPosition(position,RegExp(""));
 			const word = document.getText(range);
 
 			const dollarrange = document.getWordRangeAtPosition(position, RegExp("[$]sp"));
@@ -1842,7 +1842,7 @@ function validateMemorySafety(){
 			if (numberMatch){
 				let numberString: string = numberMatch[0]; 
 				let parsedNumber: number = parseInt(numberString, 10);
-				stackDiff += parsedNumber;
+				stackDiff -= parsedNumber;
 			}
 		}
 	});
