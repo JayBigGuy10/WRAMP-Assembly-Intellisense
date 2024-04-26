@@ -781,9 +781,9 @@ export function activate(this: any, context: vscode.ExtensionContext) {
 	);
 
 	vscode.languages.registerHoverProvider('wramp', {
-		provideHover(document, position, token) {
+		provideHover(document: { getWordRangeAtPosition: (arg0: any, arg1: RegExp | undefined) => any; getText: (arg0: any) => any; }, position: any, token: any) {
 
-			const range = document.getWordRangeAtPosition(position);
+			const range = document.getWordRangeAtPosition(position,RegExp(""));
 			const word = document.getText(range);
 
 			const dollarrange = document.getWordRangeAtPosition(position, RegExp("[$]sp"));
@@ -1761,9 +1761,17 @@ It is similar to a #define directive in C. It will not define an area in memory,
 	// item always up-to-date
 	context.subscriptions.push(vscode.window.onDidChangeActiveTextEditor(updateStatusBarItem));
 	context.subscriptions.push(vscode.window.onDidChangeTextEditorSelection(updateStatusBarItem));
+	
+	//do the same for memory safety
+	context.subscriptions.push(vscode.window.onDidChangeActiveTextEditor(validateMemorySafety));
+	context.subscriptions.push(vscode.window.onDidChangeTextEditorSelection(validateMemorySafety));
+
+	
 
 	// update status bar item once at start
 	updateStatusBarItem();
+	//update memorySaftey once at start
+	validateMemorySafety();
 
 }
 
@@ -1783,7 +1791,7 @@ function getCommandCount(editor: vscode.TextEditor | undefined): number[] {
 	let cmdCounter = 0;
 	let LOC = 0;
 	let lines = editor?.document.getText().split("\n");
-	lines?.forEach(line => {
+	lines?.forEach((line: string) => {
 		line = line.replace(/\t/g, ' ').replace(/\r/g, ' ').replace(/\n/g, ' ').trimStart();
 
 		if (!line.startsWith("#") && line.trim() != ''){
@@ -1798,4 +1806,53 @@ function getCommandCount(editor: vscode.TextEditor | undefined): number[] {
 	return [cmdCounter, LOC];
 }
 
+
+function validateMemorySafety(){
+
+	let editor = vscode.window.activeTextEditor;
+
+	//if not a wramp file then dont bother checking 
+	if(editor?.document.languageId != "wramp"){
+		return;
+	}
+
+
+	let stackDiff = 0;
+	let lines = editor?.document.getText().split("\n");
+
+	//pattens for adding/subtracting immediates 
+	let addiPattern = /addi(\s*\$sp\s*,\s*){2}\d/i;
+	let subiPattern = /subi(\s*\$sp\s*,\s*){2}\d/i;
+	let subuiPattern = /subui(\s*\$sp\s*,\s*){2}\d/i
+
+	lines?.forEach((line: string) =>{
+
+		if (addiPattern.exec(line)){
+			//extract number out of line and then add to stackDiff
+			//Assume there not going todo something like addi $sp,$sp,-1
+			let numberMatch = /\d+/.exec(line);
+			if (numberMatch){
+				let numberString: string = numberMatch[0]; 
+				let parsedNumber: number = parseInt(numberString, 10);
+				stackDiff += parsedNumber;
+			}	
+		}
+		else if(subiPattern.exec(line)||subuiPattern.exec(line)){
+			let numberMatch = /\d+/.exec(line);
+			if (numberMatch){
+				let numberString: string = numberMatch[0]; 
+				let parsedNumber: number = parseInt(numberString, 10);
+				stackDiff -= parsedNumber;
+			}
+		}
+	});
+
+	if (stackDiff > 0){
+		vscode.window.showErrorMessage("This Program will overFlow");
+	}
+	else if(stackDiff < 0){
+		vscode.window.showErrorMessage("This will overwite the stack incorrectly");
+	}
+
+}
 
