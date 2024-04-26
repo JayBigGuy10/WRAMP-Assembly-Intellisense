@@ -3,6 +3,10 @@
 This extension implements the provideHover and provideCompletionItems functions of IntelliSense into the editor for the WRAMP Assembly language. 
 It also provides an "Assemble & Link" button in the editor titlebar menu.
 
+New Features
+ - Assemble, Link & Run - Found in the Assemble & Link dropdown, uses a modified wsim that will automatically open the srec
+ - Stack Checking - Will warn you if your program doesn't move the stack pointer back to where it started (Potential overflow / underflow)
+
 WRAMP was developed by the University of Waikato as an easy-to-learn architecture for teaching assembly language and basic processor concepts.
 
 ## Features

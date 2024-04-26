@@ -781,9 +781,9 @@ export function activate(this: any, context: vscode.ExtensionContext) {
 	);
 
 	vscode.languages.registerHoverProvider('wramp', {
-		provideHover(document: { getWordRangeAtPosition: (arg0: any, arg1: RegExp | undefined) => any; getText: (arg0: any) => any; }, position: any, token: any) {
+		provideHover(document, position, token) {
 
-			const range = document.getWordRangeAtPosition(position,RegExp(""));
+			const range = document.getWordRangeAtPosition(position);
 			const word = document.getText(range);
 
 			const dollarrange = document.getWordRangeAtPosition(position, RegExp("[$]sp"));
@@ -1665,7 +1665,7 @@ It is similar to a #define directive in C. It will not define an area in memory,
 
 	config = vscode.workspace.getConfiguration("wramp-runner");
 
-	if (config.get<boolean>("useIntegratedToolchain")){
+	if (config.get<boolean>("useIntegratedToolchain")) {
 		if (os.platform() === "win32") {
 			context.environmentVariableCollection.append("PATH", ";" + context.extensionUri.fsPath + "/toolchain-win");
 		} else {
@@ -1761,12 +1761,12 @@ It is similar to a #define directive in C. It will not define an area in memory,
 	// item always up-to-date
 	context.subscriptions.push(vscode.window.onDidChangeActiveTextEditor(updateStatusBarItem));
 	context.subscriptions.push(vscode.window.onDidChangeTextEditorSelection(updateStatusBarItem));
-	
+
 	//do the same for memory safety
 	context.subscriptions.push(vscode.window.onDidChangeActiveTextEditor(validateMemorySafety));
 	context.subscriptions.push(vscode.window.onDidChangeTextEditorSelection(validateMemorySafety));
 
-	
+
 
 	// update status bar item once at start
 	updateStatusBarItem();
@@ -1787,17 +1787,17 @@ function updateStatusBarItem(): void {
 
 function getCommandCount(editor: vscode.TextEditor | undefined): number[] {
 
-	let commands = ['movgs','movsg','break','syscall','rfe','add','addi','addu','addui','sub','subi','subu','subui','mult','multi','multu','multui','div','divi','divu','divui','rem','remi','remu','remui','lhi','la','and','andi','or','ori','xor','xori','sll','slli','srl','srli','sra','srai','j','jr','jal','jalr','beqz','bnez','lw','sw','slt','slti','sltu','sltui','sgt','sgti','sgtu','sgtui','sle','slei','sleu','sleui','sge','sgei','sgeu','sgeui','seq','seqi','sequ','sequi','sne','snei','sneu','sneui'];
+	let commands = ['movgs', 'movsg', 'break', 'syscall', 'rfe', 'add', 'addi', 'addu', 'addui', 'sub', 'subi', 'subu', 'subui', 'mult', 'multi', 'multu', 'multui', 'div', 'divi', 'divu', 'divui', 'rem', 'remi', 'remu', 'remui', 'lhi', 'la', 'and', 'andi', 'or', 'ori', 'xor', 'xori', 'sll', 'slli', 'srl', 'srli', 'sra', 'srai', 'j', 'jr', 'jal', 'jalr', 'beqz', 'bnez', 'lw', 'sw', 'slt', 'slti', 'sltu', 'sltui', 'sgt', 'sgti', 'sgtu', 'sgtui', 'sle', 'slei', 'sleu', 'sleui', 'sge', 'sgei', 'sgeu', 'sgeui', 'seq', 'seqi', 'sequ', 'sequi', 'sne', 'snei', 'sneu', 'sneui'];
 	let cmdCounter = 0;
 	let LOC = 0;
 	let lines = editor?.document.getText().split("\n");
-	lines?.forEach((line: string) => {
+	lines?.forEach(line => {
 		line = line.replace(/\t/g, ' ').replace(/\r/g, ' ').replace(/\n/g, ' ').trimStart();
 
-		if (!line.startsWith("#") && line.trim() != ''){
+		if (!line.startsWith("#") && line.trim() != '') {
 			LOC++;
 			line = line.split(" ")[0].split("$")[0];
-			if (commands.find(command => command == line) != undefined){
+			if (commands.find(command => command == line) != undefined) {
 				cmdCounter++;
 			}
 		}
@@ -1807,12 +1807,13 @@ function getCommandCount(editor: vscode.TextEditor | undefined): number[] {
 }
 
 
-function validateMemorySafety(){
+//contributed by Dantheyman, April 2024
+function validateMemorySafety() {
 
 	let editor = vscode.window.activeTextEditor;
 
 	//if not a wramp file then dont bother checking 
-	if(editor?.document.languageId != "wramp"){
+	if (editor?.document.languageId != "wramp") {
 		return;
 	}
 
@@ -1823,36 +1824,93 @@ function validateMemorySafety(){
 	//pattens for adding/subtracting immediates 
 	let addiPattern = /addi(\s*\$sp\s*,\s*){2}\d/i;
 	let subiPattern = /subi(\s*\$sp\s*,\s*){2}\d/i;
-	let subuiPattern = /subui(\s*\$sp\s*,\s*){2}\d/i
+	let subuiPattern = /subui(\s*\$sp\s*,\s*){2}\d/i;
+	let adduiPattern = /addui(\s*\$sp\s*,\s*){2}\d/i;
 
-	lines?.forEach((line: string) =>{
+	lines?.forEach((line: string) => {
 
-		if (addiPattern.exec(line)){
+		if (addiPattern.exec(line) || adduiPattern.exec(line)) {
 			//extract number out of line and then add to stackDiff
 			//Assume there not going todo something like addi $sp,$sp,-1
 			let numberMatch = /\d+/.exec(line);
-			if (numberMatch){
-				let numberString: string = numberMatch[0]; 
+			if (numberMatch) {
+				let numberString: string = numberMatch[0];
 				let parsedNumber: number = parseInt(numberString, 10);
 				stackDiff += parsedNumber;
-			}	
+			}
 		}
-		else if(subiPattern.exec(line)||subuiPattern.exec(line)){
+		else if (subiPattern.exec(line) || subuiPattern.exec(line)) {
 			let numberMatch = /\d+/.exec(line);
-			if (numberMatch){
-				let numberString: string = numberMatch[0]; 
+			if (numberMatch) {
+				let numberString: string = numberMatch[0];
 				let parsedNumber: number = parseInt(numberString, 10);
 				stackDiff -= parsedNumber;
 			}
 		}
 	});
 
-	if (stackDiff > 0){
-		vscode.window.showErrorMessage("This Program will overFlow");
+	if (stackDiff < 0) {
+		//vscode.window.showErrorMessage("This Program will overFlow");
+		addMessageToProblemView("This program may overflow, more space on the stack is allocated (subi/subui) than is torn down (addi/addui). [Assuming all statements manipulating $sp run only once]", vscode.DiagnosticSeverity.Warning);
+
 	}
-	else if(stackDiff < 0){
-		vscode.window.showErrorMessage("This will overwite the stack incorrectly");
+	else if (stackDiff > 0) {
+		//vscode.window.showErrorMessage("This will overwite the stack incorrectly");
+		addMessageToProblemView("This program may overwrite the stack incorrectly, more space on the stack is torn down (addi/addui) than is allocated (subi/subui). [Assuming all statements manipulating $sp run only once]", vscode.DiagnosticSeverity.Warning);
+	} else if (stackDiff == 0) {
+		clearMessagesFromProblemView();
+		vscode.commands.executeCommand('workbench.actions.hide.problems');
 	}
 
+}
+
+
+// Create a diagnostic collection to store diagnostics
+const diagnosticCollection = vscode.languages.createDiagnosticCollection('myExtension');
+
+function addMessageToProblemView(message: string, severity: vscode.DiagnosticSeverity) {
+
+	// Get the active text editor
+	const editor = vscode.window.activeTextEditor;
+
+	if (editor) {
+		let diagnosticArray = diagnosticCollection.get(editor.document.uri);
+
+		let bcheck = true;
+
+		diagnosticArray?.forEach(currentDiagnostic => {
+			if (currentDiagnostic.message == message) {
+				bcheck = false;
+			}
+		});
+
+		if (bcheck) {
+
+			diagnosticCollection.delete(editor.document.uri);
+
+			// Create a diagnostic object
+			const diagnostic = new vscode.Diagnostic(
+				new vscode.Range(new vscode.Position(0, 0), new vscode.Position(0, 0)),
+				message,
+				severity
+			);
+			diagnostic.source = "WRAMP Assembly Intellisense";
+
+			// Add the diagnostic to the collection
+			diagnosticCollection.set(editor.document.uri, [diagnostic]);
+
+			// Show the Problem view
+			vscode.commands.executeCommand('workbench.actions.view.problems');
+
+		}
+	}
+}
+
+function clearMessagesFromProblemView() {
+	// Clear all diagnostics from the collection
+	const editor = vscode.window.activeTextEditor;
+	if (editor) {
+		diagnosticCollection.delete(editor.document.uri);
+	}
 }
 

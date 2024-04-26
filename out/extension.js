@@ -737,7 +737,7 @@ function activate(context) {
     );
     vscode.languages.registerHoverProvider('wramp', {
         provideHover(document, position, token) {
-            const range = document.getWordRangeAtPosition(position, RegExp(""));
+            const range = document.getWordRangeAtPosition(position);
             const word = document.getText(range);
             const dollarrange = document.getWordRangeAtPosition(position, RegExp("[$]sp"));
             const dollarword = document.getText(dollarrange);
@@ -1692,7 +1692,7 @@ function getCommandCount(editor) {
     let cmdCounter = 0;
     let LOC = 0;
     let lines = editor?.document.getText().split("\n");
-    lines?.forEach((line) => {
+    lines?.forEach(line => {
         line = line.replace(/\t/g, ' ').replace(/\r/g, ' ').replace(/\n/g, ' ').trimStart();
         if (!line.startsWith("#") && line.trim() != '') {
             LOC++;
@@ -1704,6 +1704,7 @@ function getCommandCount(editor) {
     });
     return [cmdCounter, LOC];
 }
+//contributed by Dantheyman, April 2024
 function validateMemorySafety() {
     let editor = vscode.window.activeTextEditor;
     //if not a wramp file then dont bother checking 
@@ -1716,8 +1717,9 @@ function validateMemorySafety() {
     let addiPattern = /addi(\s*\$sp\s*,\s*){2}\d/i;
     let subiPattern = /subi(\s*\$sp\s*,\s*){2}\d/i;
     let subuiPattern = /subui(\s*\$sp\s*,\s*){2}\d/i;
+    let adduiPattern = /addui(\s*\$sp\s*,\s*){2}\d/i;
     lines?.forEach((line) => {
-        if (addiPattern.exec(line)) {
+        if (addiPattern.exec(line) || adduiPattern.exec(line)) {
             //extract number out of line and then add to stackDiff
             //Assume there not going todo something like addi $sp,$sp,-1
             let numberMatch = /\d+/.exec(line);
@@ -1732,15 +1734,53 @@ function validateMemorySafety() {
             if (numberMatch) {
                 let numberString = numberMatch[0];
                 let parsedNumber = parseInt(numberString, 10);
-                stackDiff += parsedNumber;
+                stackDiff -= parsedNumber;
             }
         }
     });
-    if (stackDiff > 0) {
-        vscode.window.showErrorMessage("This Program will overFlow");
+    if (stackDiff < 0) {
+        //vscode.window.showErrorMessage("This Program will overFlow");
+        addMessageToProblemView("This program may overflow, more space on the stack is allocated (subi/subui) than is torn down (addi/addui). [Assuming all statements manipulating $sp run only once]", vscode.DiagnosticSeverity.Warning);
     }
-    else if (stackDiff < 0) {
-        vscode.window.showErrorMessage("This will overwite the stack incorrectly");
+    else if (stackDiff > 0) {
+        //vscode.window.showErrorMessage("This will overwite the stack incorrectly");
+        addMessageToProblemView("This program may overwrite the stack incorrectly, more space on the stack is torn down (addi/addui) than is allocated (subi/subui). [Assuming all statements manipulating $sp run only once]", vscode.DiagnosticSeverity.Warning);
+    }
+    else if (stackDiff == 0) {
+        clearMessagesFromProblemView();
+        vscode.commands.executeCommand('workbench.actions.hide.problems');
+    }
+}
+// Create a diagnostic collection to store diagnostics
+const diagnosticCollection = vscode.languages.createDiagnosticCollection('myExtension');
+function addMessageToProblemView(message, severity) {
+    // Get the active text editor
+    const editor = vscode.window.activeTextEditor;
+    if (editor) {
+        let diagnosticArray = diagnosticCollection.get(editor.document.uri);
+        let bcheck = true;
+        diagnosticArray?.forEach(currentDiagnostic => {
+            if (currentDiagnostic.message == message) {
+                bcheck = false;
+            }
+        });
+        if (bcheck) {
+            diagnosticCollection.delete(editor.document.uri);
+            // Create a diagnostic object
+            const diagnostic = new vscode.Diagnostic(new vscode.Range(new vscode.Position(0, 0), new vscode.Position(0, 0)), message, severity);
+            diagnostic.source = "WRAMP Assembly Intellisense";
+            // Add the diagnostic to the collection
+            diagnosticCollection.set(editor.document.uri, [diagnostic]);
+            // Show the Problem view
+            vscode.commands.executeCommand('workbench.actions.view.problems');
+        }
+    }
+}
+function clearMessagesFromProblemView() {
+    // Clear all diagnostics from the collection
+    const editor = vscode.window.activeTextEditor;
+    if (editor) {
+        diagnosticCollection.delete(editor.document.uri);
     }
 }
 //# sourceMappingURL=extension.js.map
