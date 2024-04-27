@@ -1821,11 +1821,18 @@ function validateMemorySafety() {
 	let stackDiff = 0;
 	let lines = editor?.document.getText().split("\n");
 
-	//pattens for adding/subtracting immediates 
+
+	//patterns for adding/subtracting immediates 
 	let addiPattern = /addi(\s*\$sp\s*,\s*){2}\d/i;
 	let subiPattern = /subi(\s*\$sp\s*,\s*){2}\d/i;
 	let subuiPattern = /subui(\s*\$sp\s*,\s*){2}\d/i;
 	let adduiPattern = /addui(\s*\$sp\s*,\s*){2}\d/i;
+
+	//patterns for adding/subtracting non immediates
+	let addPattern = /add(\s*\$sp\s*,\s*){2}\d/i;
+	let subPattern = /sub(\s*\$sp\s*,\s*){2}\d/i;
+	let subuPattern = /subu(\s*\$sp\s*,\s*){2}\d/i;
+	let adduPattern = /addu(\s*\$sp\s*,\s*){2}\d/i;
 
 	lines?.forEach((line: string) => {
 
@@ -1846,6 +1853,11 @@ function validateMemorySafety() {
 				let parsedNumber: number = parseInt(numberString, 10);
 				stackDiff -= parsedNumber;
 			}
+		}
+		//if any non immediate athrimetic is used on the stack then with current approach we can not determine the memory safety
+		else if(addPattern.exec(line)||adduPattern.exec(line)||subPattern.exec(line)||subuPattern.exec(line)){
+			addMessageToProblemView("Because you are adding or subtracting to the stack using add,addu,sub, or subu, the memory safety of the program can not be validated", vscode.DiagnosticSeverity.Warning);
+			return;
 		}
 	});
 
