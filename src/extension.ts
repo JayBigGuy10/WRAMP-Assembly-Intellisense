@@ -1821,11 +1821,18 @@ function validateMemorySafety() {
 	let stackDiff = 0;
 	let lines = editor?.document.getText().split("\n");
 
-	//pattens for adding/subtracting immediates 
+
+	//patterns for adding/subtracting immediates 
 	let addiPattern = /addi(\s*\$sp\s*,\s*){2}\d/i;
 	let subiPattern = /subi(\s*\$sp\s*,\s*){2}\d/i;
 	let subuiPattern = /subui(\s*\$sp\s*,\s*){2}\d/i;
 	let adduiPattern = /addui(\s*\$sp\s*,\s*){2}\d/i;
+
+	//patterns for adding/subtracting non immediates
+	let addPattern = /add(\s*\$sp\s*,\s*){2}\d/i;
+	let subPattern = /sub(\s*\$sp\s*,\s*){2}\d/i;
+	let subuPattern = /subu(\s*\$sp\s*,\s*){2}\d/i;
+	let adduPattern = /addu(\s*\$sp\s*,\s*){2}\d/i;
 
 	lines?.forEach((line: string) => {
 
@@ -1847,19 +1854,23 @@ function validateMemorySafety() {
 				stackDiff -= parsedNumber;
 			}
 		}
+		//if any non immediate athrimetic is used on the stack then with current approach we can not determine the memory safety
+		else if(addPattern.exec(line)||adduPattern.exec(line)||subPattern.exec(line)||subuPattern.exec(line)){
+			addMessageToProblemView("Because you are adding or subtracting to the stack using add,addu,sub, or subu, the memory safety of the program can not be validated", vscode.DiagnosticSeverity.Warning);
+			return;
+		}
 	});
 
 	if (stackDiff < 0) {
 		//vscode.window.showErrorMessage("This Program will overFlow");
-		addMessageToProblemView("This program may overflow, more space on the stack is allocated (subi/subui) than is torn down (addi/addui). [Assuming all statements manipulating $sp run only once]", vscode.DiagnosticSeverity.Warning);
+		addMessageToProblemView("This program may overflow, more space is pushed onto the stack (subi/subui) than is popped off (addi/addui) by "+Math.abs(stackDiff)+". [Assuming all statements manipulating $sp run only once]", vscode.DiagnosticSeverity.Warning);
 
 	}
 	else if (stackDiff > 0) {
 		//vscode.window.showErrorMessage("This will overwite the stack incorrectly");
-		addMessageToProblemView("This program may overwrite the stack incorrectly, more space on the stack is torn down (addi/addui) than is allocated (subi/subui). [Assuming all statements manipulating $sp run only once]", vscode.DiagnosticSeverity.Warning);
+		addMessageToProblemView("This program may overwrite the stack incorrectly, more space is popped off the stack (addi/addui) than is pushed on (subi/subui) by "+Math.abs(stackDiff)+". [Assuming all statements manipulating $sp run only once]", vscode.DiagnosticSeverity.Warning);
 	} else if (stackDiff == 0) {
 		clearMessagesFromProblemView();
-		vscode.commands.executeCommand('workbench.actions.hide.problems');
 	}
 
 }
