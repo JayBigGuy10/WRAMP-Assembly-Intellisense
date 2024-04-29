@@ -1834,7 +1834,7 @@ function validateMemorySafety() {
 	let addPattern = /add\s*\$sp\s*,(\s*\$\w+\s*,*){2}/i;
 	let subPattern = /sub\s*\$sp\s*,(\s*\$\w+\s*,*){2}/i;
 	let subuPattern = /subu\s*\$sp\s*,(\s*\$\w+\s*,*){2}/i;
-	let adduPattern = /addu\s*\$sp\s*,(\s*\$\w+\s*,*){2}\s*/i;
+	let adduPattern = /addu\s*\$sp\s*,(\s*\$\w+\s*,*){2}/i;
 
 	lines?.forEach((line: string) => {
 
