@@ -1720,10 +1720,10 @@ function validateMemorySafety() {
     let subuiPattern = /subui(\s*\$sp\s*,\s*){2}\d/i;
     let adduiPattern = /addui(\s*\$sp\s*,\s*){2}\d/i;
     //patterns for adding/subtracting non immediates
-    let addPattern = /add(\s*\$sp\s*,\s*){2}\d/i;
-    let subPattern = /sub(\s*\$sp\s*,\s*){2}\d/i;
-    let subuPattern = /subu(\s*\$sp\s*,\s*){2}\d/i;
-    let adduPattern = /addu(\s*\$sp\s*,\s*){2}\d/i;
+    let addPattern = /add\s*\$sp\s*,(\s*\$\w+\s*,*){2}/i;
+    let subPattern = /sub\s*\$sp\s*,(\s*\$\w+\s*,*){2}/i;
+    let subuPattern = /subu\s*\$sp\s*,(\s*\$\w+\s*,*){2}/i;
+    let adduPattern = /addu\s*\$sp\s*,(\s*\$\w+\s*,*){2}/i;
     lines?.forEach((line) => {
         if (addiPattern.exec(line) || adduiPattern.exec(line)) {
             //extract number out of line and then add to stackDiff
@@ -1762,7 +1762,7 @@ function validateMemorySafety() {
         }
     }
     else {
-        addMessageToProblemView("Because you are adding or subtracting to the stack using add,addu,sub, or subu, the memory safety of the program can not be validated", vscode.DiagnosticSeverity.Information, false);
+        addMessageToProblemView("Because you are manipulating the stack using add, addu, sub, or subu, the memory safety of the program can't be determined", vscode.DiagnosticSeverity.Information, false);
     }
 }
 // Create a diagnostic collection to store diagnostics

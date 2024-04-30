@@ -1875,7 +1875,7 @@ function validateMemorySafety() {
 			clearMessagesFromProblemView();
 		}
 	} else {
-		addMessageToProblemView("Because you are adding or subtracting to the stack using add,addu,sub, or subu, the memory safety of the program can not be validated", vscode.DiagnosticSeverity.Information, false);
+		addMessageToProblemView("Because you are manipulating the stack using add, addu, sub, or subu, the memory safety of the program can't be determined", vscode.DiagnosticSeverity.Information, false);
 	}
 
 }
