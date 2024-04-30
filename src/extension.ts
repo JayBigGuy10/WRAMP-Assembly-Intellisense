@@ -1831,10 +1831,10 @@ function validateMemorySafety() {
 	let adduiPattern = /addui(\s*\$sp\s*,\s*){2}\d/i;
 
 	//patterns for adding/subtracting non immediates
-	let addPattern = /add(\s*\$sp\s*,\s*){2}\d/i;
-	let subPattern = /sub(\s*\$sp\s*,\s*){2}\d/i;
-	let subuPattern = /subu(\s*\$sp\s*,\s*){2}\d/i;
-	let adduPattern = /addu(\s*\$sp\s*,\s*){2}\d/i;
+	let addPattern = /add\s*\$sp\s*,(\s*\$\w+\s*,*){2}/i;
+	let subPattern = /sub\s*\$sp\s*,(\s*\$\w+\s*,*){2}/i;
+	let subuPattern = /subu\s*\$sp\s*,(\s*\$\w+\s*,*){2}/i;
+	let adduPattern = /addu\s*\$sp\s*,(\s*\$\w+\s*,*){2}/i;
 
 	lines?.forEach((line: string) => {
 
