@@ -1713,11 +1713,17 @@ function validateMemorySafety() {
     }
     let stackDiff = 0;
     let lines = editor?.document.getText().split("\n");
-    //pattens for adding/subtracting immediates 
+    let canHelp = true;
+    //patterns for adding/subtracting immediates 
     let addiPattern = /addi(\s*\$sp\s*,\s*){2}\d/i;
     let subiPattern = /subi(\s*\$sp\s*,\s*){2}\d/i;
     let subuiPattern = /subui(\s*\$sp\s*,\s*){2}\d/i;
     let adduiPattern = /addui(\s*\$sp\s*,\s*){2}\d/i;
+    //patterns for adding/subtracting non immediates
+    let addPattern = /add\s*\$sp\s*,(\s*\$\w+\s*,*){2}/i;
+    let subPattern = /sub\s*\$sp\s*,(\s*\$\w+\s*,*){2}/i;
+    let subuPattern = /subu\s*\$sp\s*,(\s*\$\w+\s*,*){2}/i;
+    let adduPattern = /addu\s*\$sp\s*,(\s*\$\w+\s*,*){2}/i;
     lines?.forEach((line) => {
         if (addiPattern.exec(line) || adduiPattern.exec(line)) {
             //extract number out of line and then add to stackDiff
@@ -1737,22 +1743,31 @@ function validateMemorySafety() {
                 stackDiff -= parsedNumber;
             }
         }
+        //if any non immediate athrimetic is used on the stack then with current approach we can not determine the memory safety
+        else if (addPattern.exec(line) || adduPattern.exec(line) || subPattern.exec(line) || subuPattern.exec(line)) {
+            canHelp = false;
+        }
     });
-    if (stackDiff < 0) {
-        //vscode.window.showErrorMessage("This Program will overFlow");
-        addMessageToProblemView("This program may overflow, more space is pushed onto the stack (subi/subui) than is popped off (addi/addui) by " + Math.abs(stackDiff) + ". [Assuming all statements manipulating $sp run only once]", vscode.DiagnosticSeverity.Warning);
+    if (canHelp) {
+        if (stackDiff < 0) {
+            //vscode.window.showErrorMessage("This Program will overFlow");
+            addMessageToProblemView("This program may overflow, more space is pushed onto the stack (subi/subui) than is popped off (addi/addui) by " + Math.abs(stackDiff) + ". [Assuming all statements manipulating $sp run only once]", vscode.DiagnosticSeverity.Warning);
+        }
+        else if (stackDiff > 0) {
+            //vscode.window.showErrorMessage("This will overwite the stack incorrectly");
+            addMessageToProblemView("This program may overwrite the stack incorrectly, more space is popped off the stack (addi/addui) than is pushed on (subi/subui) by " + Math.abs(stackDiff) + ". [Assuming all statements manipulating $sp run only once]", vscode.DiagnosticSeverity.Warning);
+        }
+        else if (stackDiff == 0) {
+            clearMessagesFromProblemView();
+        }
     }
-    else if (stackDiff > 0) {
-        //vscode.window.showErrorMessage("This will overwite the stack incorrectly");
-        addMessageToProblemView("This program may overwrite the stack incorrectly, more space is popped off the stack (addi/addui) than is pushed on (subi/subui) by " + Math.abs(stackDiff) + ". [Assuming all statements manipulating $sp run only once]", vscode.DiagnosticSeverity.Warning);
-    }
-    else if (stackDiff == 0) {
-        clearMessagesFromProblemView();
+    else {
+        addMessageToProblemView("Because you are manipulating the stack using add, addu, sub, or subu, the memory safety of the program can't be determined", vscode.DiagnosticSeverity.Information, false);
     }
 }
 // Create a diagnostic collection to store diagnostics
 const diagnosticCollection = vscode.languages.createDiagnosticCollection('myExtension');
-function addMessageToProblemView(message, severity) {
+function addMessageToProblemView(message, severity, popup = true) {
     // Get the active text editor
     const editor = vscode.window.activeTextEditor;
     if (editor) {
@@ -1771,7 +1786,9 @@ function addMessageToProblemView(message, severity) {
             // Add the diagnostic to the collection
             diagnosticCollection.set(editor.document.uri, [diagnostic]);
             // Show the Problem view
-            vscode.commands.executeCommand('workbench.actions.view.problems');
+            if (popup) {
+                vscode.commands.executeCommand('workbench.actions.view.problems');
+            }
         }
     }
 }
